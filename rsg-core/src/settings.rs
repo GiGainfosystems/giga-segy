@@ -10,7 +10,7 @@ use crate::{
 #[cfg(feature = "to_json")]
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "to_json", derive(Serialize, Deserialize))]
 /// This structure holds a list of various settings to be imported, for the custom reading of
 /// byte locations of various variables in the headers and other things when interpreting a SEGY file.

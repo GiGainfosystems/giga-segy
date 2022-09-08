@@ -498,7 +498,7 @@ trace name: {}",
     }
 }
 
-fn c_safe_name(name: &[u8]) -> String {
+pub(crate) fn c_safe_name(name: &[u8]) -> String {
     if name.iter().any(|c| *c == 0) {
         "".to_owned()
     } else {

@@ -54,11 +54,9 @@ impl std::fmt::Display for SampleFormatCode {
 impl SampleFormatCode {
     /// NB: We give a result here to make life simpler for ourselves down the line.
     pub fn new(source: u16) -> Result<Self, RsgError> {
-        SampleFormatCode::from_u16(source).ok_or_else(|| {
-            RsgError::ParseEnum {
-                f: "SampleFormatCode".to_string(),
-                code: source,
-            }
+        SampleFormatCode::from_u16(source).ok_or_else(|| RsgError::ParseEnum {
+            f: "SampleFormatCode".to_string(),
+            code: source,
         })
     }
 
@@ -277,11 +275,9 @@ pub enum FixedLengthTraces {
 impl FixedLengthTraces {
     /// NB: We give a result here to make life simpler for ourselves down the line.
     pub fn new(source: u16) -> Result<Self, RsgError> {
-        Self::from_u16(source).ok_or_else(|| {
-            RsgError::ParseEnum {
-                f: "FixedLengthTraces".to_string(),
-                code: source,
-            }
+        Self::from_u16(source).ok_or_else(|| RsgError::ParseEnum {
+            f: "FixedLengthTraces".to_string(),
+            code: source,
         })
     }
 

@@ -1,0 +1,20 @@
+# NB: This file was needed for our specific project, which used a very specific
+# version of `cbindgen` (a fork of 0.1.20).
+# ({ git = "https://github.com/weiznich/cbindgen", rev = "f9cf5245" })
+include_guard = "rsg_core_h"
+include_version = false
+braces = "NextLine"
+tab_width = 4
+language = "C++"
+documentation = true
+
+[export]
+include = ["Trace", "TapeLabel","BinHeader", "OrderTraceBy"]
+exclude = []
+item_types = []
+
+[parse.expand]
+crates = []
+all_features = false
+default_features = true
+features = []

@@ -1,0 +1,15 @@
+[licenses]
+# We have to be careful on this part since we set 'unlicensed' to be allowed in order to minimize the output
+# (Only show unallowed licenses as error)
+unlicensed = "allow"
+confidence-threshold = 0.90
+allow = [
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "ISC",
+    "MIT",
+    "MPL-2.0",
+    "Zlib"
+]

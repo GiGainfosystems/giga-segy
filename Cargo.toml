@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "rsg-core",
+    "rsg-in",
+    "rsg-out",
+]

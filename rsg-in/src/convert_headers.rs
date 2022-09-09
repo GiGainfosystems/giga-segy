@@ -3,7 +3,7 @@
 use rsg_core::bitconverter::{converter_chooser, BitConverter};
 use rsg_core::enums::*;
 use rsg_core::errors::*;
-use rsg_core::settings::SegySettings;
+use rsg_core::SegySettings;
 use rsg_core::{BinHeader, TapeLabel, TraceHeader};
 
 use num::FromPrimitive;

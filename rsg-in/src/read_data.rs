@@ -3,8 +3,8 @@
 //! memory.
 use rsg_core::bitconverter::converter_chooser;
 use rsg_core::errors::*;
-use rsg_core::header_structs::BinHeader;
-use rsg_core::settings::SegySettings;
+use rsg_core::BinHeader;
+use rsg_core::SegySettings;
 use rsg_core::Trace;
 
 use crate::memory_map::MappedSegY;

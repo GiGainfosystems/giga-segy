@@ -1,6 +1,6 @@
 //! This submodule exists to map the file as a "memory map" and then allow reading of the data.
 use rsg_core::errors::*;
-use rsg_core::header_structs::*;
+use rsg_core::{BinHeader, TraceHeader, TapeLabel};
 use rsg_core::{SegySettings, Trace};
 use rsg_core::{BIN_HEADER_LEN, TAPE_LABEL_LEN, TEXT_HEADER_LEN, TRACE_HEADER_LEN};
 

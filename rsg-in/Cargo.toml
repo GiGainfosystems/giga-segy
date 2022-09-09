@@ -4,6 +4,17 @@ version = "0.1.0"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "rsg_in"
+crate-type = ["staticlib","rlib"]
 
 [dependencies]
+rsg-core = { path = "../rsg-core" }
+
+encoding8 = "0.3"
+memmap = "0.6"
+num = "0.2"
+
+[features]
+default = []
+to_json = ["rsg-core/to_json"]

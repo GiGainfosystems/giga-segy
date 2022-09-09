@@ -159,7 +159,7 @@ pub fn converter_chooser(format: SampleFormatCode, le: bool) -> Result<BitConver
 }
 
 /// A helper function to convert ascii null terminated to string
-pub(crate) fn ascii_bytes_to_string(bytes: &[u8]) -> String {
+pub fn ascii_bytes_to_string(bytes: &[u8]) -> String {
     let mut bytes = bytes.to_vec();
     let i = bytes.iter().position(|x| *x == 0).unwrap_or(bytes.len());
     bytes.truncate(i);

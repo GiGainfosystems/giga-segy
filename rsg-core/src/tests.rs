@@ -551,9 +551,9 @@ mod bitconverter {
 mod settings {
     use crate::enums::*;
     use crate::settings::*;
+    use crate::TRACE_HEADER_LEN;
     use crate::{CDPX_BYTE_LOCATION, CDPY_BYTE_LOCATION};
     use crate::{CROSSLINE_BYTE_LOCATION, INLINE_BYTE_LOCATION};
-    use crate::TRACE_HEADER_LEN;
 
     macro_rules! test_set_get {
         ($setter:ident, $getter:ident, $field:ident, $in_val:expr, $out_val:expr) => {

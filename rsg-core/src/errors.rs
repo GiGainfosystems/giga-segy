@@ -5,8 +5,11 @@ use crate::enums::SampleFormatCode;
 pub enum RsgError {
     /// TryFromSliceError from the std library.
     TryFromSlice(std::array::TryFromSliceError),
+    /// TryFromSliceError from the std library.
+    TryFromUtf8(std::string::FromUtf8Error),
     /// IoError from the std library.
     StdIoError(std::io::Error),
+    /// A wrapped memory map error.
     /// Binary header length problems.
     BinHeaderLength { l: usize },
     /// File is too short (even shorter.)
@@ -48,6 +51,8 @@ pub enum RsgError {
     },
     /// Enum creation error.
     ParseEnum { f: String, code: u16 },
+    /// Map file error.
+    MapFile(Box<dyn std::error::Error>),
 }
 
 impl From<std::array::TryFromSliceError> for RsgError {
@@ -62,6 +67,7 @@ impl std::fmt::Display for RsgError {
         match self {
             StdIoError(x) => write!(fmt, "{}", x),
             TryFromSlice(x) => write!(fmt, "{}", x),
+            TryFromUtf8(x) => write!(fmt, "{}", x),
             BinHeaderLength { l } => write!(fmt, "Binary header length should be 400 but is {}", l),
             FileTooShort => write!(fmt, "File is too short to be SEG-Y"),
             FloatConversion { float, format } => write!(fmt, "Could not convert {} to {}.", float, format),
@@ -77,6 +83,7 @@ impl std::fmt::Display for RsgError {
             LongDataVector { l_data } => write!(fmt, "Data vector has {} points, but max length is 65535.", l_data),
             BadDataVector { l_data, l_bin, l_trace } => write!(fmt, "Data length is {}, but was declared as {} (binary header) or {} (trace header).", l_data, l_bin, l_trace),
             ParseEnum { f, code } => write!(fmt, "Could not parse source ({}) to {}.", code, f),
+            MapFile(e) => write!(fmt, "Could not create file map: {}", e),
         }
     }
 }

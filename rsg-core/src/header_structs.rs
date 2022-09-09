@@ -2,7 +2,9 @@
 //! used for better interpreting the file in the parser.
 use crate::bitconverter::ascii_bytes_to_string;
 use crate::enums::*;
+use crate::SegySettings;
 
+use encoding8::ebcdic::to_ascii;
 #[cfg(feature = "to_json")]
 use serde::{Deserialize, Serialize};
 
@@ -220,6 +222,13 @@ impl TapeLabel {
 }
 
 impl BinHeader {
+    pub fn adjust_sample_count(&mut self, settings: &SegySettings) {
+        if let Some(dim_z) = settings.override_dim_z {
+            self.no_samples = dim_z as u16;
+            self.fixed_length_trace_flag = FixedLengthTraces::Yes;
+        }
+    }
+
     #[cfg(feature = "to_json")]
     pub fn to_json(&self) -> Result<String, RsgError> {
         serde_json::to_string(&self).map_err(|e| RsgError::SerdeError(e))
@@ -227,6 +236,27 @@ impl BinHeader {
 }
 
 impl TraceHeader {
+    pub fn adjust_sample_count(&mut self, settings: &SegySettings) {
+        if let Some(dim_z) = settings.override_dim_z {
+            self.no_samples_in_trace = dim_z as u16;
+        }
+    }
+
+    /// This gets the trace name as a String.
+    pub fn get_trace_name(&self) -> String {
+        // Trace name should start with "SEG", or just be blank.
+        let is_ascii = self.trace_name[0] == b'S';
+        if is_ascii {
+            return ascii_bytes_to_string(&self.trace_name);
+        }
+        let name = self
+            .trace_name
+            .iter()
+            .map(|c| to_ascii(*c))
+            .collect::<Vec<_>>();
+        ascii_bytes_to_string(&name)
+    }
+
     #[cfg(feature = "to_json")]
     pub fn to_json(&self) -> Result<String, RsgError> {
         serde_json::to_string(&self).map_err(|e| RsgError::SerdeError(e))

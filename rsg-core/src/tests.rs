@@ -551,9 +551,9 @@ mod bitconverter {
 mod settings {
     use crate::enums::*;
     use crate::settings::*;
-    use crate::{
-        CDPX_BYTE_LOCATION, CDPY_BYTE_LOCATION, CROSSLINE_BYTE_LOCATION, INLINE_BYTE_LOCATION,
-    };
+    use crate::{CDPX_BYTE_LOCATION, CDPY_BYTE_LOCATION};
+    use crate::{CROSSLINE_BYTE_LOCATION, INLINE_BYTE_LOCATION};
+    use crate::TRACE_HEADER_LEN;
 
     macro_rules! test_set_get {
         ($setter:ident, $getter:ident, $field:ident, $in_val:expr, $out_val:expr) => {
@@ -682,17 +682,15 @@ mod settings {
         );
     }
 
-    // #[test]
-    // #[allow(unused_must_use)]
-    // fn test_set_override_coordinate_scaling() {
-    //     test_set_get!(
-    //         set_override_coordinate_scaling,
-    //         get_override_coordinate_scaling,
-    //         override_coordinate_scaling,
-    //         42.,
-    //         Some(42)
-    //     );
-    // }
+    #[test]
+    #[allow(unused_must_use)]
+    fn test_set_override_coordinate_scaling() {
+        let mut default = SegySettings::default();
+        default.set_override_coordinate_scaling(42.).expect("Valid");
+        assert!(default.set_override_coordinate_scaling(42000.).is_err());
+        assert_eq!(default.override_coordinate_scaling, Some(42));
+        assert_eq!(default.get_override_coordinate_scaling(), Some(42.));
+    }
 
     #[test]
     #[allow(unused_must_use)]
@@ -743,6 +741,38 @@ mod settings {
     }
 
     #[test]
+    #[allow(unused_must_use)]
+    fn test_inline_no_bidx_fail() {
+        let mut default = SegySettings::default();
+        assert!(default.set_inline_no_bidx(TRACE_HEADER_LEN - 3).is_err());
+        assert!(default.set_inline_no_bidx(TRACE_HEADER_LEN + 3).is_err());
+    }
+
+    #[test]
+    #[allow(unused_must_use)]
+    fn test_crossline_no_bidx_fail() {
+        let mut default = SegySettings::default();
+        assert!(default.set_crossline_no_bidx(TRACE_HEADER_LEN - 3).is_err());
+        assert!(default.set_crossline_no_bidx(TRACE_HEADER_LEN + 3).is_err());
+    }
+
+    #[test]
+    #[allow(unused_must_use)]
+    fn test_y_ensemble_bidx_fail() {
+        let mut default = SegySettings::default();
+        assert!(default.set_y_ensemble_bidx(TRACE_HEADER_LEN - 3).is_err());
+        assert!(default.set_y_ensemble_bidx(TRACE_HEADER_LEN + 3).is_err());
+    }
+
+    #[test]
+    #[allow(unused_must_use)]
+    fn test_x_ensemble_bidx_fail() {
+        let mut default = SegySettings::default();
+        assert!(default.set_x_ensemble_bidx(TRACE_HEADER_LEN - 3).is_err());
+        assert!(default.set_x_ensemble_bidx(TRACE_HEADER_LEN + 3).is_err());
+    }
+
+    #[test]
     fn test_step_by() {
         test_set_get!(set_step_by, get_step_by, step_by, 34, 34);
     }
@@ -781,39 +811,48 @@ mod settings {
     }
 
     #[test]
-    #[allow(unused_must_use)]
     fn test_override_dim_x() {
-        test_set_get!(
-            set_override_dim_x,
-            get_override_dim_x,
-            override_dim_x,
-            34,
-            Some(34)
-        );
+        let mut default = SegySettings::default();
+        default.set_override_dim_x(44).expect("Valid");
+        assert_eq!(default.override_dim_x, Some(44));
+        assert_eq!(default.get_override_dim_x(), Some(44));
+        assert_eq!(default.crossline_min_max, Some([0, 43]))
     }
 
     #[test]
-    #[allow(unused_must_use)]
     fn test_override_dim_y() {
-        test_set_get!(
-            set_override_dim_y,
-            get_override_dim_y,
-            override_dim_y,
-            34,
-            Some(34)
-        );
+        let mut default = SegySettings::default();
+        default.set_override_dim_y(44).expect("Valid");
+        assert_eq!(default.override_dim_y, Some(44));
+        assert_eq!(default.get_override_dim_y(), Some(44));
+        assert_eq!(default.inline_min_max, Some([0, 43]))
     }
 
     #[test]
-    #[allow(unused_must_use)]
     fn test_override_dim_z() {
-        test_set_get!(
-            set_override_dim_z,
-            get_override_dim_z,
-            override_dim_z,
-            340,
-            Some(340)
-        );
+        let mut default = SegySettings::default();
+        default.set_override_dim_z(44).expect("Valid");
+        assert_eq!(default.override_dim_z, Some(44));
+        assert_eq!(default.get_override_dim_z(), Some(44));
+        assert_eq!(default.inline_min_max, None)
+    }
+
+    #[test]
+    fn test_override_dim_x_fail() {
+        let mut default = SegySettings::default();
+        assert!(default.set_override_dim_x(-44).is_err());
+    }
+
+    #[test]
+    fn test_override_dim_y_fail() {
+        let mut default = SegySettings::default();
+        assert!(default.set_override_dim_y(-44).is_err());
+    }
+
+    #[test]
+    fn test_override_dim_z_fail() {
+        let mut default = SegySettings::default();
+        assert!(default.set_override_dim_z(-44).is_err());
     }
 
     #[test]

@@ -293,9 +293,7 @@ impl SegyFile {
         Vec<Trace>,
     ) {
         let SegyFile {
-            metadata,
-            traces,
-            ..
+            metadata, traces, ..
         } = self;
         let (tape_label, text_header, extended_headers, bin_header, _) = metadata.deconstruct();
         (

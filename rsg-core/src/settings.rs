@@ -3,6 +3,7 @@
 //! NB: It should be noted that since few files are in keeping with the proper SEG-Y format, this
 //! is necessary. On the other hand, using this functionality can easily break things.
 use crate::enums::{MeasurementSystem, OrderTraceBy, SampleFormatCode, TraceIdCode};
+use crate::errors::*;
 use crate::{
     CDPX_BYTE_LOCATION, CDPY_BYTE_LOCATION, CROSSLINE_BYTE_LOCATION, INLINE_BYTE_LOCATION,
     TRACE_HEADER_LEN,
@@ -135,61 +136,69 @@ impl SegySettings {
     pub fn set_override_coordinate_format(
         &mut self,
         format: SampleFormatCode,
-    ) -> Result<(), String> {
+    ) -> Result<(), RsgError> {
         use SampleFormatCode::*;
         match format {
             IbmFloat32 | Float32 | UInt32 | Int32 => self.override_coordinate_format = Some(format),
             _ => {
-                return Err(format!(
-                    "Coordinate format must be 32-byte. {:?} is not",
-                    format
-                ))
+                return Err(RsgError::BitConversionError {
+                    msg: format!("Coordinate format must be 32-byte. {:?} is not", format),
+                })
             }
         }
         Ok(())
     }
 
     /// Sets the coordinate scaling as overridden by the value.
-    pub fn set_override_coordinate_scaling(&mut self, scaling: f64) -> Result<(), String> {
+    pub fn set_override_coordinate_scaling(&mut self, scaling: f64) -> Result<(), RsgError> {
         use num::FromPrimitive;
 
-        let scaling = i16::from_f64(scaling)
-            .ok_or_else(|| format!("{} is outside of the scaling range.", scaling))?;
+        let scaling = i16::from_f64(scaling).ok_or_else(|| RsgError::BitConversionError {
+            msg: format!("{} is outside of the scaling range.", scaling),
+        })?;
         self.override_coordinate_scaling = Some(scaling);
         Ok(())
     }
 
     /// Sets the inline number byte index as overridden by the value.
-    pub fn set_inline_no_bidx(&mut self, bidx: usize) -> Result<(), String> {
+    pub fn set_inline_no_bidx(&mut self, bidx: usize) -> Result<(), RsgError> {
         if bidx > TRACE_HEADER_LEN - 4 {
-            return Err("Maximum permitted index value for trace header".to_string());
+            return Err(RsgError::SEGYSettingsError {
+                msg: "Maximum permitted index value for trace header".to_string(),
+            });
         }
         self.inline_no_bidx = bidx;
         Ok(())
     }
 
     /// Sets the crossline number byte index as overridden by the value.
-    pub fn set_crossline_no_bidx(&mut self, bidx: usize) -> Result<(), String> {
+    pub fn set_crossline_no_bidx(&mut self, bidx: usize) -> Result<(), RsgError> {
         if bidx > TRACE_HEADER_LEN - 4 {
-            return Err("Maximum permitted index value for trace header".to_string());
+            return Err(RsgError::SEGYSettingsError {
+                msg: "Maximum permitted index value for trace header".to_string(),
+            });
         }
         self.crossline_no_bidx = bidx;
         Ok(())
     }
 
     /// Sets the x-ensemble (x-CDP) as overridden by the input value.
-    pub fn set_x_ensemble_bidx(&mut self, bidx: usize) -> Result<(), String> {
+    pub fn set_x_ensemble_bidx(&mut self, bidx: usize) -> Result<(), RsgError> {
         if bidx > TRACE_HEADER_LEN - 4 {
-            return Err("Maximum permitted index value for trace header".to_string());
+            return Err(RsgError::SEGYSettingsError {
+                msg: "Maximum permitted index value for trace header".to_string(),
+            });
         }
         self.x_ensemble_bidx = bidx;
         Ok(())
     }
 
     /// Sets the y-ensemble (y-CDP) as overridden by the input value.
-    pub fn set_y_ensemble_bidx(&mut self, bidx: usize) -> Result<(), String> {
+    pub fn set_y_ensemble_bidx(&mut self, bidx: usize) -> Result<(), RsgError> {
         if bidx > TRACE_HEADER_LEN - 4 {
-            return Err("Maximum permitted index value for trace header".to_string());
+            return Err(RsgError::SEGYSettingsError {
+                msg: "Maximum permitted index value for trace header".to_string(),
+            });
         }
         self.y_ensemble_bidx = bidx;
         Ok(())
@@ -216,9 +225,11 @@ impl SegySettings {
     }
 
     /// Sets the override for inline count.
-    pub fn set_override_dim_x(&mut self, dim_x: i32) -> Result<(), String> {
+    pub fn set_override_dim_x(&mut self, dim_x: i32) -> Result<(), RsgError> {
         if dim_x < 0 {
-            Err("Custom x-dimension passed to `SegySettings` must be positive.".to_string())
+            Err(RsgError::SEGYSettingsError {
+                msg: "Custom x-dimension passed to `SegySettings` must be positive.".to_string(),
+            })
         } else {
             self.override_dim_x = Some(dim_x);
             // These must be overriden, or limiters will use the original inline/crossline numbers
@@ -229,9 +240,11 @@ impl SegySettings {
     }
 
     /// Sets the override for crossline count.
-    pub fn set_override_dim_y(&mut self, dim_y: i32) -> Result<(), String> {
+    pub fn set_override_dim_y(&mut self, dim_y: i32) -> Result<(), RsgError> {
         if dim_y < 0 {
-            Err("Custom x-dimension passed to `SegySettings` must be positive.".to_string())
+            Err(RsgError::SEGYSettingsError {
+                msg: "Custom x-dimension passed to `SegySettings` must be positive.".to_string(),
+            })
         } else {
             self.override_dim_y = Some(dim_y);
             // These must be overriden, or limiters will use the original inline/crossline numbers
@@ -242,9 +255,11 @@ impl SegySettings {
     }
 
     /// Sets the override for sample count.
-    pub fn set_override_dim_z(&mut self, dim_z: i32) -> Result<(), String> {
+    pub fn set_override_dim_z(&mut self, dim_z: i32) -> Result<(), RsgError> {
         if dim_z < 0 {
-            Err("Custom x-dimension passed to `SegySettings` must be positive.".to_string())
+            Err(RsgError::SEGYSettingsError {
+                msg: "Custom x-dimension passed to `SegySettings` must be positive.".to_string(),
+            })
         } else {
             self.override_dim_z = Some(dim_z);
             Ok(())

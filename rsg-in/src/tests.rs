@@ -255,7 +255,6 @@ fn test_get_trace_name() {
 
     let mut th = segy.traces_iter().nth(0).unwrap().get_header().to_owned();
     th.trace_name = [b'S', b'E', b'G', b'0', b'1', b'2', b'3', b'4'];
-    let string = th
-        .get_trace_name();
+    let string = th.get_trace_name();
     assert_eq!(&string, "SEG01234");
 }

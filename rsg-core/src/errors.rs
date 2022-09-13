@@ -12,6 +12,8 @@ pub enum RsgError {
     /// A wrapped memory map error.
     /// Binary header length problems.
     BinHeaderLength { l: usize },
+    /// An error in the settings of a SEGY.
+    SEGYSettingsError { msg: String },
     /// File is too short (even shorter.)
     FileTooShort,
     /// Coordinate format cannot make this float.
@@ -61,6 +63,12 @@ impl From<std::array::TryFromSliceError> for RsgError {
     }
 }
 
+impl From<std::io::Error> for RsgError {
+    fn from(e: std::io::Error) -> Self {
+        Self::StdIoError(e)
+    }
+}
+
 impl std::fmt::Display for RsgError {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         use self::RsgError::*;
@@ -69,6 +77,7 @@ impl std::fmt::Display for RsgError {
             TryFromSlice(x) => write!(fmt, "{}", x),
             TryFromUtf8(x) => write!(fmt, "{}", x),
             BinHeaderLength { l } => write!(fmt, "Binary header length should be 400 but is {}", l),
+            SEGYSettingsError { msg } => write!(fmt, "Error in settings: {}", msg),
             FileTooShort => write!(fmt, "File is too short to be SEG-Y"),
             FloatConversion { float, format } => write!(fmt, "Could not convert {} to {}.", float, format),
             IncompleteTrace => write!(fmt, "Last trace incomplete: File may be corrupt."),

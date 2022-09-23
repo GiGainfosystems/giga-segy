@@ -3,6 +3,8 @@
 use crate::bitconverter::ascii_bytes_to_string;
 use crate::enums::*;
 use crate::SegySettings;
+#[cfg(feature = "to_json")]
+use crate::RsgError;
 
 use encoding8::ebcdic::to_ascii;
 #[cfg(feature = "to_json")]
@@ -217,7 +219,7 @@ impl TapeLabel {
 
     #[cfg(feature = "to_json")]
     pub fn to_json(&self) -> Result<String, RsgError> {
-        serde_json::to_string(&self.to_readable()?).map_err(|e| RsgError::SerdeError(e))
+        serde_json::to_string(&self.to_readable()).map_err(RsgError::SerdeError)
     }
 }
 
@@ -231,7 +233,7 @@ impl BinHeader {
 
     #[cfg(feature = "to_json")]
     pub fn to_json(&self) -> Result<String, RsgError> {
-        serde_json::to_string(&self).map_err(|e| RsgError::SerdeError(e))
+        serde_json::to_string(&self).map_err(RsgError::SerdeError)
     }
 }
 
@@ -259,7 +261,7 @@ impl TraceHeader {
 
     #[cfg(feature = "to_json")]
     pub fn to_json(&self) -> Result<String, RsgError> {
-        serde_json::to_string(&self).map_err(|e| RsgError::SerdeError(e))
+        serde_json::to_string(&self).map_err(RsgError::SerdeError)
     }
 }
 

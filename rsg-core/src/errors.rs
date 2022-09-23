@@ -55,6 +55,9 @@ pub enum RsgError {
     ParseEnum { f: String, code: u16 },
     /// Map file error.
     MapFile(Box<dyn std::error::Error>),
+    /// Map file error.
+    #[cfg(feature = "to_json")]
+    SerdeError(serde_json::Error),
 }
 
 impl From<std::array::TryFromSliceError> for RsgError {
@@ -73,6 +76,8 @@ impl std::fmt::Display for RsgError {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         use self::RsgError::*;
         match self {
+            #[cfg(feature = "to_json")]
+            SerdeError(x) => write!(fmt, "{}", x),
             StdIoError(x) => write!(fmt, "{}", x),
             TryFromSlice(x) => write!(fmt, "{}", x),
             TryFromUtf8(x) => write!(fmt, "{}", x),

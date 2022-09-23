@@ -2,9 +2,9 @@
 //! used for better interpreting the file in the parser.
 use crate::bitconverter::ascii_bytes_to_string;
 use crate::enums::*;
-use crate::SegySettings;
 #[cfg(feature = "to_json")]
 use crate::RsgError;
+use crate::SegySettings;
 
 use encoding8::ebcdic::to_ascii;
 #[cfg(feature = "to_json")]

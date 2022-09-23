@@ -235,12 +235,8 @@ impl MappedSegY {
 
 /// This function creates a memory map from a file.
 pub(crate) fn map_file_to_memory(file_name: &str) -> Result<(Mmap, std::fs::File), RsgError> {
-    let segy = std::fs::File::open(file_name).map_err(|e| RsgError::MapFile(Box::new(e)))?;
-    let map = unsafe {
-        MmapOptions::new()
-            .map(&segy)
-            .map_err(|e| RsgError::MapFile(Box::new(e)))?
-    };
+    let segy = std::fs::File::open(file_name).map_err(RsgError::MapFile)?;
+    let map = unsafe { MmapOptions::new().map(&segy).map_err(RsgError::MapFile)? };
     Ok((map, segy))
 }
 

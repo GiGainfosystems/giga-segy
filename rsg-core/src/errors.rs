@@ -53,8 +53,8 @@ pub enum RsgError {
     },
     /// Enum creation error.
     ParseEnum { f: String, code: u16 },
-    /// Map file error.
-    MapFile(Box<dyn std::error::Error>),
+    /// Map file error (this is just a `std::io` error when mapping files).
+    MapFile(std::io::Error),
     /// Map file error.
     #[cfg(feature = "to_json")]
     SerdeError(serde_json::Error),
@@ -104,6 +104,14 @@ impl std::fmt::Display for RsgError {
 
 impl std::error::Error for RsgError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        None
+        use self::RsgError::*;
+        match self {
+            #[cfg(feature = "to_json")]
+            SerdeError(x) => x.source(),
+            StdIoError(x) | MapFile(x) => x.source(),
+            TryFromSlice(x) => x.source(),
+            TryFromUtf8(x) => x.source(),
+            _ => None,
+        }
     }
 }

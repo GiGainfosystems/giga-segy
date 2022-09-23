@@ -18,9 +18,10 @@ pub mod utils;
 mod write_data;
 pub mod write_headers;
 
-use rsg_core::errors::*;
-use rsg_core::header_structs::*;
-use rsg_core::{SegyMetadata, Trace};
+pub use rsg_core::enums;
+pub use rsg_core::errors::*;
+pub use rsg_core::header_structs::*;
+pub use rsg_core::{SegyMetadata, SegySettings, Trace};
 
 use num::ToPrimitive;
 use std::fmt::Debug;

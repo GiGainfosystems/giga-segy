@@ -102,6 +102,12 @@ impl std::fmt::Display for RsgError {
     }
 }
 
+impl From<RsgError> for String {
+    fn from(e: RsgError) -> String {
+        e.to_string()
+    }
+}
+
 impl std::error::Error for RsgError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         use self::RsgError::*;

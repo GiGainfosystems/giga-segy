@@ -12,9 +12,11 @@ mod tests;
 use memory_map::MappedSegY;
 use std::collections::HashMap;
 
+pub use rsg_core::enums;
 pub use rsg_core::errors::*;
 pub use rsg_core::header_structs::*;
-pub use rsg_core::settings::SegySettings;
+pub use rsg_core::{SegyMetadata, SegySettings, Trace};
+
 use rsg_core::*;
 
 /// A structure which represents a mapped SEG-Y file. The headers are parsed, but the traces

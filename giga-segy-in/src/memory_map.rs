@@ -1,8 +1,8 @@
 //! This submodule exists to map the file as a "memory map" and then allow reading of the data.
-use rsg_core::errors::*;
-use rsg_core::{BinHeader, TapeLabel, TraceHeader};
-use rsg_core::{SegySettings, Trace};
-use rsg_core::{BIN_HEADER_LEN, TAPE_LABEL_LEN, TEXT_HEADER_LEN, TRACE_HEADER_LEN};
+use giga_segy_core::errors::*;
+use giga_segy_core::{BinHeader, TapeLabel, TraceHeader};
+use giga_segy_core::{SegySettings, Trace};
+use giga_segy_core::{BIN_HEADER_LEN, TAPE_LABEL_LEN, TEXT_HEADER_LEN, TRACE_HEADER_LEN};
 
 use super::convert_headers::{HeaderFromBytes, TraceHeaderFromBytes};
 

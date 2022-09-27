@@ -8,10 +8,10 @@ use crate::create_headers::CreateTraceHeader;
 use crate::utils::CoordinateScalar;
 use crate::SegyFile;
 
+use giga_segy_core::enums::*;
+use giga_segy_core::errors::*;
+use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
 use num::ToPrimitive;
-use rsg_core::enums::*;
-use rsg_core::errors::*;
-use rsg_core::{BinHeader, SegySettings, TraceHeader};
 use std::fmt::Debug;
 use std::path::Path;
 
@@ -124,7 +124,7 @@ impl Survey {
     }
 
     fn read(path: &str, name: &str, settings: SegySettings) -> Result<Self, RsgError> {
-        let segy_file = rsg_in::SegyFile::open(path, settings)?;
+        let segy_file = giga_segy_in::SegyFile::open(path, settings)?;
 
         let bin_header = segy_file.get_bin_header();
         let mut data = Vec::with_capacity(segy_file.trace_count());

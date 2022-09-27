@@ -1,9 +1,9 @@
 // Copyright (C) 2022 by GiGa infosystems
 //! This submodule exists for converting headers to bytes and writing them.
+use giga_segy_core::enums::*;
+use giga_segy_core::errors::*;
+use giga_segy_core::{BinHeader, TapeLabel, TraceHeader};
 use num::ToPrimitive;
-use rsg_core::enums::*;
-use rsg_core::errors::*;
-use rsg_core::{BinHeader, TapeLabel, TraceHeader};
 // use rust_segy_input::{BIN_HEADER_LEN, TRACE_HEADER_LEN};
 
 use std::fs::File;

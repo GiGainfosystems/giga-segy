@@ -1,15 +1,15 @@
 [package]
-name = "rsg-out"
-version = "0.1.0"
+name = "giga-segy-out"
+version = "0.2.0"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 
 [lib]
-name = "rsg_out"
+name = "giga_segy_out"
 crate-type = ["staticlib","rlib"]
 
 [dependencies]
-rsg-core = { path = "../rsg-core" }
+giga-segy-core = { path = "../giga-segy-core" }
 
 fnv = "1"
 num = "0.2"
@@ -17,5 +17,5 @@ tinyvec = { version = "1.5", features = ["alloc"] }
 
 
 [dev-dependencies]
-rsg-in = { path = "../rsg-in" }
+giga-segy-in = { path = "../giga-segy-in" }
 tempfile = "3.3"

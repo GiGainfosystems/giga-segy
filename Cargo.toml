@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "rsg-core",
-    "rsg-in",
-    "rsg-out",
+    "giga-segy-core",
+    "giga-segy-in",
+    "giga-segy-out",
 ]

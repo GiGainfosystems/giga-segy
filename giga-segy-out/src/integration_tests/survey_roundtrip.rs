@@ -4,7 +4,7 @@
 use tempfile;
 
 use super::*;
-use rsg_core::SampleFormatCode as Sac;
+use giga_segy_core::SampleFormatCode as Sac;
 
 fn create_survey(
     name: &str,
@@ -102,7 +102,7 @@ fn check(read: &Survey, survey: &Survey, data_ok: bool, coords_ok: bool) {
     }
 }
 
-fn check_headers(read: rsg_in::SegyFile, bin_h: BinHeader, tr_h: Vec<TraceHeader>) {
+fn check_headers(read: giga_segy_in::SegyFile, bin_h: BinHeader, tr_h: Vec<TraceHeader>) {
     if &bin_h != read.get_bin_header() {
         println!("new_bin_header:{:#?}", read.get_bin_header());
         println!("old_bin_header:{:#?}", bin_h);
@@ -362,8 +362,8 @@ fn header_test_bidx_shifts() {
 
         // First to demonstrate that we have indeed shifted because trying to open
         // the file with default settings will give us super invalid headers.
-        let read =
-            rsg_in::SegyFile::open(path_str, SegySettings::default()).expect("Could not reopen");
+        let read = giga_segy_in::SegyFile::open(path_str, SegySettings::default())
+            .expect("Could not reopen");
 
         assert_eq!(&original_bin_header, read.get_bin_header());
         // There are some traces where inline_no and xline_no are zero anyway.
@@ -378,7 +378,7 @@ fn header_test_bidx_shifts() {
         assert!(read.traces_iter().all(|t| t.get_header().crossline_no == 0));
 
         // But if we open the file with the right settings, magic happens.
-        let read = rsg_in::SegyFile::open(path_str, settings).expect("Could not reopen");
+        let read = giga_segy_in::SegyFile::open(path_str, settings).expect("Could not reopen");
 
         assert_eq!(&original_bin_header, read.get_bin_header());
         for (w, r) in old_trace_headers.iter().zip(read.traces_iter()) {
@@ -415,7 +415,7 @@ fn header_tests_inner(settings: SegySettings, sample_format: SampleFormatCode) {
             .cloned()
             .collect::<Vec<_>>();
 
-        let segy_file = rsg_in::SegyFile::open(path_str, settings).expect("Could not reopen");
+        let segy_file = giga_segy_in::SegyFile::open(path_str, settings).expect("Could not reopen");
         check_headers(segy_file, original_bin_header, original_trace_headers);
     }
 }

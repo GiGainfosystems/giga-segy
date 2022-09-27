@@ -1,8 +1,8 @@
 // Copyright (C) 2022 by GiGa infosystems
 //! This contains the specific settings for writing the SEGY file.
-use rsg_core::enums::*;
-use rsg_core::errors::*;
-use rsg_core::SegySettings;
+use giga_segy_core::enums::*;
+use giga_segy_core::errors::*;
+use giga_segy_core::SegySettings;
 
 /// This trait allows any structure that implements a few functions to be used
 /// For settings. Most importantly, it allows the rust_segy_input::SegySettings

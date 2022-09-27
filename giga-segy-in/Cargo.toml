@@ -1,15 +1,15 @@
 [package]
-name = "rsg-in"
-version = "0.1.0"
+name = "giga-segy-in"
+version = "0.2.0"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 
 [lib]
-name = "rsg_in"
+name = "giga_segy_in"
 crate-type = ["staticlib","rlib"]
 
 [dependencies]
-rsg-core = { path = "../rsg-core" }
+giga-segy-core = { path = "../giga-segy-core" }
 
 encoding8 = "0.3"
 memmap = "0.6"
@@ -17,4 +17,4 @@ num = "0.2"
 
 [features]
 default = []
-to_json = ["rsg-core/to_json"]
+to_json = ["giga-segy-core/to_json"]

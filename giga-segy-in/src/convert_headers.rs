@@ -1,10 +1,10 @@
 //! This file contains the definitions for the binary headers of a SEGY file. These can then be
 //! used for better interpreting the file in the parser.
-use rsg_core::bitconverter::{converter_chooser, BitConverter};
-use rsg_core::enums::*;
-use rsg_core::errors::*;
-use rsg_core::SegySettings;
-use rsg_core::{BinHeader, TapeLabel, TraceHeader};
+use giga_segy_core::bitconverter::{converter_chooser, BitConverter};
+use giga_segy_core::enums::*;
+use giga_segy_core::errors::*;
+use giga_segy_core::SegySettings;
+use giga_segy_core::{BinHeader, TapeLabel, TraceHeader};
 
 use num::FromPrimitive;
 

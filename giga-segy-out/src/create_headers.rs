@@ -1,7 +1,7 @@
 // Copyright (C) 2022 by GiGa infosystems
 //! This here to make pseudo-default headers.
-use rsg_core::enums::*;
-use rsg_core::{BinHeader, TapeLabel, TraceHeader};
+use giga_segy_core::enums::*;
+use giga_segy_core::{BinHeader, TapeLabel, TraceHeader};
 
 use crate::SegyHeaderToBytes;
 

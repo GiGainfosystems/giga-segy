@@ -1,10 +1,10 @@
 // Copyright (C) 2022 by GiGa infosystems
 //! This contains the code for writing the data to the file.
+use giga_segy_core::enums::SampleFormatCode;
+use giga_segy_core::enums::SampleFormatCode::*;
+use giga_segy_core::errors::*;
+use giga_segy_core::BinHeader;
 use num::ToPrimitive;
-use rsg_core::enums::SampleFormatCode;
-use rsg_core::enums::SampleFormatCode::*;
-use rsg_core::errors::*;
-use rsg_core::BinHeader;
 use std::fmt::Debug;
 use std::mem;
 use tinyvec::TinyVec;
@@ -211,10 +211,10 @@ impl LosslessWriteableSegyData for u8 {
 /// NB: for now, due to the lare number of combos we mostly don't test conversions
 /// outside of 32 and 64 bit types.
 mod tests {
-    use rsg_core::enums::SampleFormatCode;
-    use rsg_core::enums::SampleFormatCode::*;
-    use rsg_core::errors::*;
-    use rsg_core::BinHeader;
+    use giga_segy_core::enums::SampleFormatCode;
+    use giga_segy_core::enums::SampleFormatCode::*;
+    use giga_segy_core::errors::*;
+    use giga_segy_core::BinHeader;
 
     use super::*;
     use crate::create_headers::CreateBinHeader;

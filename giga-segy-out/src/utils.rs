@@ -19,7 +19,7 @@ use std::ops::Div;
 /// magnitude, or those from non-integer floats will be handled lossily.
 ///
 /// ```
-/// # use rsg_out::utils::CoordinateScalar;
+/// # use giga_segy_out::utils::CoordinateScalar;
 /// let s = CoordinateScalar::from_multiplier(0.1f64).unwrap();
 /// let a = s.scale(52.55);
 /// let b = s.scale_to_i32(52.).unwrap();

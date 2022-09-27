@@ -1,11 +1,11 @@
 // Copyright (C) 2020 by GiGa infosystems
 //! This submodule deals with reading the actual data in the file once it has been mapped to
 //! memory.
-use rsg_core::bitconverter::converter_chooser;
-use rsg_core::errors::*;
-use rsg_core::BinHeader;
-use rsg_core::SegySettings;
-use rsg_core::Trace;
+use giga_segy_core::bitconverter::converter_chooser;
+use giga_segy_core::errors::*;
+use giga_segy_core::BinHeader;
+use giga_segy_core::SegySettings;
+use giga_segy_core::Trace;
 
 use crate::memory_map::MappedSegY;
 

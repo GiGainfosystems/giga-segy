@@ -1,12 +1,12 @@
 // Copyright (C) 2022 by GiGa infosystems
 //! This is a simplified library for reading SEGY files into rust.
 extern crate fnv;
+extern crate giga_segy_core;
 extern crate num;
-extern crate rsg_core;
 #[macro_use]
 extern crate tinyvec;
 #[cfg(test)]
-extern crate rsg_in;
+extern crate giga_segy_in;
 #[cfg(test)]
 extern crate tempfile;
 
@@ -18,10 +18,10 @@ pub mod utils;
 mod write_data;
 pub mod write_headers;
 
-pub use rsg_core::enums;
-pub use rsg_core::errors::*;
-pub use rsg_core::header_structs::*;
-pub use rsg_core::{SegyMetadata, SegySettings, Trace};
+pub use giga_segy_core::enums;
+pub use giga_segy_core::errors::*;
+pub use giga_segy_core::header_structs::*;
+pub use giga_segy_core::{SegyMetadata, SegySettings, Trace};
 
 use num::ToPrimitive;
 use std::fmt::Debug;

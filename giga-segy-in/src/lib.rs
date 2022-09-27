@@ -12,12 +12,12 @@ mod tests;
 use memory_map::MappedSegY;
 use std::collections::HashMap;
 
-pub use rsg_core::enums;
-pub use rsg_core::errors::*;
-pub use rsg_core::header_structs::*;
-pub use rsg_core::{SegyMetadata, SegySettings, Trace};
+pub use giga_segy_core::enums;
+pub use giga_segy_core::errors::*;
+pub use giga_segy_core::header_structs::*;
+pub use giga_segy_core::{SegyMetadata, SegySettings, Trace};
 
-use rsg_core::*;
+use giga_segy_core::*;
 
 /// A structure which represents a mapped SEG-Y file. The headers are parsed, but the traces
 /// themselves are stored as a header and the coordinates of the data in the memory map.

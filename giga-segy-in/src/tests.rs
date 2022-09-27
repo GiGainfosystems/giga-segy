@@ -1,6 +1,6 @@
 use crate::memory_map::*;
 
-use rsg_core::SegySettings;
+use giga_segy_core::SegySettings;
 
 #[cfg(test)]
 // NB: Some tests will only work with a valid SEGY file in the right place.

@@ -3,6 +3,7 @@ name = "giga-segy-core"
 version = "0.2.0"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
+links = ""
 
 [lib]
 name = "giga_segy_core"

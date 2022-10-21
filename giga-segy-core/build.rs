@@ -19,6 +19,7 @@ fn main() {
     target.pop();
 
     let src = format!("{:?}/include/giga_segy.h", root.as_str());
+    panic!("cargo:warning=\"giga_segy.h\" dir: {}", src);
     let src = src.replace('\"', "");
     let dest = format!("{:?}/giga_segy.h", target);
     let dest = dest.replace('\"', "");

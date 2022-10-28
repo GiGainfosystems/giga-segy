@@ -1,0 +1,12 @@
+{
+    "data": [
+        {
+            "value": CLIPPYWARNINGAMOUNT,
+            "title": "Clippy Warning Count"
+        }
+    ],
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Rust_programming_language_black_logo.svg",
+    "vendor": "GiGa",
+    "result": "CLIPPYRESULT",
+    "title": "Clippy"
+}

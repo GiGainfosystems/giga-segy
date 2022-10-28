@@ -1,3 +1,6 @@
+import groovy.json.JsonSlurperClassic;
+import groovy.json.JsonOutput;
+
 library 'giga'
 
 def run_build() {

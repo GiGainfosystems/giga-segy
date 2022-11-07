@@ -47,9 +47,9 @@ def run_build() {
         }
         stage('Run tests'){
           giga.test_dir("giga-segy-core", "", 4, no_url, 'test', true);
-					giga.test_dir("giga-segy-in", "", 4, no_url, 'test', true);
-					giga.test_dir("giga-segy-in", "to_json", 4, no_url, 'test', true);
-					giga.test_dir("giga-segy-out", "", 4, no_url, 'test', true);     
+          giga.test_dir("giga-segy-in", "", 4, no_url, 'test', true);
+          giga.test_dir("giga-segy-in", "to_json", 4, no_url, 'test', true);
+          giga.test_dir("giga-segy-out", "", 4, no_url, 'test', true);     
         }
       }
     }

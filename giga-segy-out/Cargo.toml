@@ -1,6 +1,6 @@
 [package]
 name = "giga-segy-out"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 
@@ -12,7 +12,7 @@ crate-type = ["staticlib","rlib"]
 giga-segy-core = { path = "../giga-segy-core" }
 
 fnv = "1"
-num = "0.2"
+num = "0.4"
 tinyvec = { version = "1.5", features = ["alloc"] }
 
 

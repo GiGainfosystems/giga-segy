@@ -1,6 +1,6 @@
 [package]
 name = "giga-segy-in"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 
@@ -13,7 +13,7 @@ giga-segy-core = { path = "../giga-segy-core" }
 
 encoding8 = "0.3"
 memmap = "0.6"
-num = "0.2"
+num = "0.4"
 
 [features]
 default = []

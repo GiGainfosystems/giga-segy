@@ -1,6 +1,6 @@
 [package]
 name = "giga-segy-core"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 links = ""
@@ -12,7 +12,7 @@ crate-type = ["staticlib","rlib"]
 [dependencies]
 encoding8 = "0.3"
 ibmfloat = "0.1"
-num = "0.2"
+num = "0.4"
 num-derive = "0.3"
 num-traits = "0.2"
 serde = { version = "1.0.40", features = ["derive"], optional = true }

@@ -1,6 +1,6 @@
 //! This is a simplified library for reading SEGY files into rust.
 extern crate encoding8;
-extern crate memmap;
+extern crate memmap2;
 extern crate num;
 
 pub mod convert_headers;

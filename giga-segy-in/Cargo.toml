@@ -12,7 +12,7 @@ crate-type = ["staticlib","rlib"]
 giga-segy-core = { path = "../giga-segy-core" }
 
 encoding8 = "0.3"
-memmap = "0.6"
+memmap2 = "0.5"
 num = "0.4"
 
 [features]

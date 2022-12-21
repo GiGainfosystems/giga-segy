@@ -7,7 +7,7 @@ use giga_segy_core::{BIN_HEADER_LEN, TAPE_LABEL_LEN, TEXT_HEADER_LEN, TRACE_HEAD
 use super::convert_headers::{HeaderFromBytes, TraceHeaderFromBytes};
 
 use encoding8::ebcdic::to_ascii;
-use memmap::{Mmap, MmapOptions};
+use memmap2::{Mmap, MmapOptions};
 
 /// This represents a memory map with an underlying SEGY file handle.
 pub struct MappedSegY {

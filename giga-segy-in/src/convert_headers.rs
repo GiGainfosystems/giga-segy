@@ -1,5 +1,6 @@
-//! This file contains the definitions for the binary headers of a SEGY file. These can then be
-//! used for better interpreting the file in the parser.
+//! This module contains the trait that is used for constructing internal representations
+//! of SEG-Y headers from bytes. It is mostly used internally by this library, but could
+//! perhaps also be of use for those who require specialisd internal representations of this data.
 use giga_segy_core::bitconverter::{converter_chooser, BitConverter};
 use giga_segy_core::enums::*;
 use giga_segy_core::errors::*;
@@ -10,12 +11,18 @@ use num::FromPrimitive;
 
 use std::convert::TryInto;
 
-/// This trait allows a header to be created from bytes, potentially
-/// using SegySettings to guide the creation process
+/// This trait allows a header to be created from bytes, potentially using SegySettings
+/// to guide the creation process. We do not expect this trait to be of use for most users
+/// of this crate, but it may be used for constructing specialised versions of SEG-Y header
+/// structs (eg. simplified structs with only the absolutely essential fields).
 pub trait HeaderFromBytes: Sized {
     fn from_bytes(bytes: &[u8], settings: &SegySettings) -> Result<Self, RsgError>;
 }
 
+/// This trait allows a header to be created from bytes, potentially using SegySettings
+/// and binary header data to guide the creation process. We do not expect this trait to be
+/// of use for most users of this crate, but it may be used for constructing specialised
+/// versions of SEG-Y header structs (eg. simplified structs with only the absolutely essential fields).
 pub trait TraceHeaderFromBytes: Sized {
     fn from_bytes(
         bytes: &[u8],

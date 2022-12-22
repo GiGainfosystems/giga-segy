@@ -9,7 +9,7 @@ use super::convert_headers::{HeaderFromBytes, TraceHeaderFromBytes};
 use encoding8::ebcdic::to_ascii;
 use memmap2::{Mmap, MmapOptions};
 
-/// This represents a memory map with an underlying SEGY file handle.
+/// This structure represents a memory map with an underlying SEGY file handle.
 pub struct MappedSegY {
     pub(crate) map: Mmap,
     _file: std::fs::File,

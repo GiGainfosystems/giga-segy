@@ -1,5 +1,13 @@
 // Copyright (C) 2022 by GiGa infosystems
-//! This is a simplified library for reading SEGY files into rust.
+//! This is a simplified library for writing SEG-Y files from rust. It is designed
+//! purely for writing SEG-Y files in a trace by trace manner and supports writing with
+//! different settings and sample coordinate formats.
+//!
+//! The library was designed to follow the SEG Technial Standards Committee's
+//! SEG-Y_r2.0 standard (from January 2017).
+//!
+//! This library is not designed for editing of SEG-Y files, although it can theoretically be accomplished
+//! with the clever use of `giga_segy_in`. However we do not recommend this.
 extern crate fnv;
 extern crate giga_segy_core;
 extern crate num;
@@ -33,13 +41,18 @@ use crate::settings::SegyWriteSettings;
 use crate::write_data::LosslessWriteableSegyData;
 use crate::write_headers::SegyHeaderToBytes;
 
-// NB: Change this to pub(crate) later.
-/// A structure that gives several different ways of looking at trace coordinates.
+
+/// This structure gives several different ways of looking at trace coordinates.
+/// It is created once a trace has been written and moved into the [`SegyFile`]
+/// lookup.
 pub struct TraceCoordinates {
+    /// Index of a trace in the order it is added to the file.
     pub idx: usize,
+    /// The start byte of the trace, including the header. 
     pub start_byte: usize,
+    /// The start byt of the trace data.
     pub data_start_byte: usize,
-    /// NB; Overall length with all headers.
+    /// NB: Overall length with all headers.
     pub byte_len: usize,
 }
 
@@ -56,16 +69,48 @@ impl TraceCoordinates {
 
 /// A structure which represents a mapped SEG-Y file. This represents a writeable SEGY.
 pub struct SegyFile<S: SegyWriteSettings> {
+    /// Metadata, including headers and settings used for creating and writing this file.
     pub metadata: SegyMetadata<S>,
+    /// A record of traces written.
     pub traces: Vec<Trace>,
-    /// This is here to speed up the lookup of traces. NB: (start_byte,index).
-    /// NB2: I suspect that the lookup will not be useful.
+    /// This is here to speed up the lookup of traces.
+    /// N2: I suspect that the lookup will not be useful.
     pub lookup: fnv::FnvHashMap<usize, TraceCoordinates>,
+    /// The file which the SEG-Y is being written to.
     pub file: File,
 }
 
 impl<S: SegyWriteSettings> SegyFile<S> {
-    /// Create a file and return the Writeable file.
+    /// Create a file and return the handle to a writeable file. Traces can then be added
+    /// one by one.
+    /// ``` 
+    /// use giga_segy_out::SegyFile;
+    /// use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
+    /// use giga_segy_core::enums::*;
+    /// use giga_segy_out::create_headers::{CreateBinHeader, CreateTraceHeader};
+    ///
+    /// let dir = tempfile::tempdir().expect("Couldn't get tempfile.");
+    /// let path = dir.path().join("my-first-segy.sgy");
+    /// 
+    /// let mut bin_header = BinHeader::default();
+    /// bin_header.sample_format_code = SampleFormatCode::Int32;
+    /// // The number of samples in either the binary or trace header must equal data vector length.
+    /// bin_header.no_samples = 50;
+    ///
+    /// let mut file = SegyFile::<SegySettings>::create_file(
+    ///     path,
+    ///     Default::default(),
+    ///     std::iter::repeat('x').take(3200).collect::<String>(),
+    ///     bin_header,
+    ///     None,
+    /// ).unwrap();
+    /// for i in 0..10 {
+    ///     let trace_header = TraceHeader::new_2d(1, 1, 0);
+    ///     // NB: `add_trace` can add data lossily (sample format is `Int32`, data format is `i64`).
+    ///     let data = (i..(i+50)).collect::<Vec<i64>>();
+    ///     file.add_trace(trace_header, None, data).unwrap();
+    /// }
+    /// ```
     pub fn create_file<T: AsRef<Path>>(
         file_name: T,
         settings: S,
@@ -97,9 +142,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     }
 
     /// This function will add a trace to the file being written. It will try to convert
-    /// The data to the desired `CoordinateFormat`, which can result in loss of precision.
-    ///
-    /// NB
+    /// The data to the desired [`enums::SampleFormatCode`], which can result in loss of precision.
     pub fn add_trace<T: ToPrimitive + Debug>(
         &mut self,
         trace_header: TraceHeader,
@@ -125,7 +168,42 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     /// NB: For this it uses the `LosslessWriteableSegyData` trait. In theory
     /// the `LosslessWriteableSegyData` trait can be implemented for type
     /// conversions that are not lossless. The out of the box implementation
-    /// should not do this however.
+    /// is lossless.
+    /// ``` 
+    /// use giga_segy_out::SegyFile;
+    /// use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
+    /// use giga_segy_core::enums::*;
+    /// use giga_segy_core::errors::RsgError;
+    /// use giga_segy_out::create_headers::{CreateBinHeader, CreateTraceHeader};
+    ///
+    /// let dir = tempfile::tempdir().expect("Couldn't get tempfile.");
+    /// let path = dir.path().join("my-first-segy.sgy");
+    /// 
+    /// let mut bin_header = BinHeader::default();
+    /// bin_header.sample_format_code = SampleFormatCode::Int32;
+    /// // The number of samples in either the binary or trace header must equal data vector length.
+    /// bin_header.no_samples = 50;
+    ///
+    /// let mut file = SegyFile::<SegySettings>::create_file(
+    ///     path,
+    ///     Default::default(),
+    ///     std::iter::repeat('x').take(3200).collect::<String>(),
+    ///     bin_header,
+    ///     None,
+    /// ).unwrap();
+    ///
+    /// let trace_header = TraceHeader::new_2d(1, 1, 0);
+    /// let data = (0..(50)).collect::<Vec<i64>>();
+    /// let err = file.add_trace_lossless(trace_header, None, data).unwrap_err();
+    /// assert!(matches!(err, RsgError::BitConversionError {..}));
+    ///
+    /// for i in 0..10 {
+    ///     let trace_header = TraceHeader::new_2d(1, 1, 0);
+    ///     let data = (i..(i+50)).collect::<Vec<i16>>();
+    ///     file.add_trace_lossless(trace_header, None, data).unwrap();
+    /// }
+    /// 
+    /// ```
     pub fn add_trace_lossless<T: LosslessWriteableSegyData>(
         &mut self,
         trace_header: TraceHeader,

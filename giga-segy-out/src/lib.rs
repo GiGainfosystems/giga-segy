@@ -93,7 +93,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     /// let path = dir.path().join("my-first-segy.sgy");
     /// 
     /// let mut bin_header = BinHeader::default();
-    /// bin_header.sample_format_code = SampleFormatCode::Int32;
+    /// bin_header.sample_format_code = SampleFormatCode::Float32;
     /// // The number of samples in either the binary or trace header must equal data vector length.
     /// bin_header.no_samples = 50;
     ///
@@ -106,8 +106,8 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     /// ).unwrap();
     /// for i in 0..10 {
     ///     let trace_header = TraceHeader::new_2d(1, 1, 0);
-    ///     // NB: `add_trace` can add data lossily (sample format is `Int32`, data format is `i64`).
-    ///     let data = (i..(i+50)).collect::<Vec<i64>>();
+    ///     // NB: `add_trace` can add data lossily (sample format is `f32`, data format is `f64`).
+    ///     let data = (i..(i+50)).map(|x| x as f64).collect::<Vec<f64>>();
     ///     file.add_trace(trace_header, None, data).unwrap();
     /// }
     /// ```

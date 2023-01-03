@@ -66,7 +66,7 @@ impl TraceCoordinates {
     }
 }
 
-/// A structure which represents a mapped SEG-Y file. This represents a writeable SEGY.
+/// A structure which represents a mapped SEG-Y file. This represents a writeable SEG-Y.
 pub struct SegyFile<S: SegyWriteSettings> {
     /// Metadata, including headers and settings used for creating and writing this file.
     pub metadata: SegyMetadata<S>,

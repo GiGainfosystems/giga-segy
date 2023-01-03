@@ -2,7 +2,7 @@
 //! This module contains the [`CoordinateScalar`] structure which deals with the somewhat unusual
 //! way that SEG-Y uses to express scaling factor of coordinates.
 //!
-//! See the SEGY-Y_r2.0 standard (january 2017), page 17 for more details.
+//! See the SEG-Y_r2.0 standard (january 2017), page 17 for more details.
 use num::{One, ToPrimitive, Zero};
 use std::cmp::Ordering;
 use std::fmt::Debug;
@@ -10,24 +10,24 @@ use std::ops::Div;
 
 /// This structure deals with scaling of coordinates.
 ///
-/// Since coordinates in  SEGY are stored as [`i32`], by default,
+/// Since coordinates in  SEG-Y are stored as [`i32`], by default,
 /// this means that decimal points cannot be stored. A scalar
 /// corrects this flaw. Scalars are somewhat unintuitive, so this
 /// utility is provided to convert normal multipliers to scalars.
 ///
-/// See the SEGY-Y_r2.0 standard (january 2017), page 17 for more details.
+/// See the SEG-Y_r2.0 standard (January 2017), page 17 for more details.
 ///
 /// NB: The multiplier should be of the same type as the coordinates
 /// that are being converted.
 ///
-/// NB2: SEGY stores scalars as i16, so initial multipliers of a high
+/// NB2: SEG-Y stores scalars as i16, so initial multipliers of a high
 /// magnitude, or those from non-integer floats will be handled lossily.
 ///
 /// ```
 /// # use giga_segy_out::utils::CoordinateScalar;
 /// // Our coordinate value is 52.55. We want to keep the decimal places,
-/// // So we multiply by x100, which means the final value, 5255 must be multiplied
-/// // by x0.01 for it to be returned to 52.55. So the input here 0.01.
+/// // So we multiply by 100, which means the final value, 5255 must be multiplied
+/// // by 0.01 for it to be returned to 52.55. So the input here 0.01.
 /// let s = CoordinateScalar::from_multiplier(0.01f64).unwrap();
 ///
 /// // `output_a`, which is what will be inserted into the trace header, should be

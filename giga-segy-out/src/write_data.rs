@@ -38,7 +38,7 @@ pub(crate) type TVu8 = TinyVec<[u8; 8]>;
 pub trait LosslessWriteableSegyData: ToPrimitive + Debug {
     /// This function exists to check whether the given type is compatible with lossless
     /// conversion with a given format. It is used as a validation check in `SegyFile::add_trace_lossless`,
-    /// but it is encouraged to use it as a sanity check when writing the SEGY writer.
+    /// but it is encouraged to use it as a sanity check when writing the SEG-Y writer.
     /// ```
     /// # use giga_segy_out::write_data::LosslessWriteableSegyData;
     /// # use giga_segy_core::enums::SampleFormatCode;

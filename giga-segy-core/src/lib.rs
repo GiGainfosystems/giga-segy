@@ -130,7 +130,7 @@ impl<S> SegyMetadata<S> {
         }
     }
 
-    /// Get the SEGY Settings.
+    /// Get the SEG-Y Settings.
     pub fn get_settings(&self) -> &S {
         &self.settings
     }

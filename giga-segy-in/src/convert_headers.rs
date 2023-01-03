@@ -12,17 +12,21 @@ use num::FromPrimitive;
 use std::convert::TryInto;
 
 /// This trait allows a header to be created from bytes, potentially using SegySettings
-/// to guide the creation process. We do not expect this trait to be of use for most users
-/// of this crate, but it may be used for constructing specialised versions of SEG-Y header
-/// structs (eg. simplified structs with only the absolutely essential fields).
+/// to guide the creation process.
+///
+/// We do not expect this trait to be of use for most users of this crate, but it
+/// may be used for constructing specialised versions of SEG-Y header structs
+/// (eg. simplified structs with only the absolutely essential fields).
 pub trait HeaderFromBytes: Sized {
     fn from_bytes(bytes: &[u8], settings: &SegySettings) -> Result<Self, RsgError>;
 }
 
 /// This trait allows a header to be created from bytes, potentially using SegySettings
-/// and binary header data to guide the creation process. We do not expect this trait to be
-/// of use for most users of this crate, but it may be used for constructing specialised
-/// versions of SEG-Y header structs (eg. simplified structs with only the absolutely essential fields).
+/// and binary header data to guide the creation process.
+///
+/// We do not expect this trait to be of use for most users of this crate,
+/// but it may be used for constructing specialised versions of SEG-Y header structs
+/// (eg. simplified structs with only the absolutely essential fields).
 pub trait TraceHeaderFromBytes: Sized {
     fn from_bytes(
         bytes: &[u8],

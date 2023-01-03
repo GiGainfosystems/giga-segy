@@ -1,4 +1,4 @@
-//! This is a simplified library for reading SEGY files into rust. It is designed for efficient
+//! This is a simplified library for reading SEG-Y files into rust. It is designed for efficient
 //! reading of SEG-Y headers and data without holding potentially very large SEG-Y files in memory.
 //!
 //! The library was designed to follow the SEG Technial Standards Committee's

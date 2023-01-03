@@ -1,4 +1,4 @@
-//! This file contains the definitions for the binary headers of a SEGY file. These can then be
+//! This file contains the definitions for the binary headers of a SEG-Y file. These can then be
 //! used for better interpreting the file in the parser.
 use crate::bitconverter::ascii_bytes_to_string;
 use crate::enums::*;
@@ -10,7 +10,7 @@ use encoding8::ebcdic::to_ascii;
 #[cfg(feature = "to_json")]
 use serde::{Deserialize, Serialize};
 
-/// This structure represents a parsed binary trace header for a single trace of a SEGY file..
+/// This structure represents a parsed binary trace header for a single trace of a SEG-Y file..
 #[derive(Debug, Clone, PartialEq)]
 #[repr(C)]
 #[cfg_attr(feature = "to_json", derive(Serialize, Deserialize))]
@@ -200,7 +200,7 @@ pub struct TraceHeader {
     pub trace_name: [u8; 8],
 }
 
-/// This structure represents a parsed binary header for a SEGY file.
+/// This structure represents a parsed binary header for a SEG-Y file.
 ///
 /// It should be noted that while the binary header  of a SEG-Y file is 400 bytes long
 /// and contains approximately 45 fields, this structure uses about 29 of these fields

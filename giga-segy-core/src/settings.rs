@@ -16,7 +16,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "to_json", derive(Serialize, Deserialize))]
 /// This structure holds a list of various settings to be imported for the custom reading of
-/// byte locations of various variables in the headers and other things when interpreting a SEGY file.
+/// byte locations of various variables in the headers and other things when interpreting a SEG-Y file.
 ///
 /// This structure does not allow direct manipulation of fields as in several cases not all possible
 /// values for that field are valid (eg byte indices are [`usize`], but a trace header is only 240 bytes long),
@@ -183,7 +183,7 @@ impl SegySettings {
     /// if the value given overflows this data type the function will return an error.
     ///
     /// Furthermore, the value given must already be in the format used by SEG-Y (see the
-    /// SEGY-Y_r2.0 standard (january 2017), page 17 for more details).
+    /// SEG-Y_r2.0 standard (january 2017), page 17 for more details).
     /// ```
     /// # use giga_segy_core::settings::*;
     /// let mut settings = SegySettings::default();

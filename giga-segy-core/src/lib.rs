@@ -32,8 +32,10 @@ pub const CROSSLINE_BYTE_LOCATION: usize = 192;
 pub const CDPX_BYTE_LOCATION: usize = 180;
 pub const CDPY_BYTE_LOCATION: usize = 184;
 
-/// This structure represents a SEG-Y trace. The Header is parsed and stored, the rest is stored
-/// as a set of indices for reading the memory map.
+/// This structure represents a SEG-Y trace.
+///
+/// The Header is parsed and stored in the structure, the data is stored
+/// in a memory map and referenced here as start and end indices.
 #[derive(Debug, Clone)]
 #[repr(C)]
 pub struct Trace {
@@ -46,7 +48,10 @@ pub struct Trace {
 }
 
 /// This structure contains all of the metadata for opening a segy file.
-/// different implementations of SegyMetadata can then be used.
+///
+/// Different implementations of SegyMetadata can then be made, depending on what type `S` is
+/// used for the settings. In general [`SegyMetadata`] is used internally by `giga_segy_input`
+/// and `giga_segy_output`, but may also prove suitable for uses elsewhere.
 pub struct SegyMetadata<S> {
     pub tape_label: Option<TapeLabel>,
     pub text_header: String,
@@ -56,7 +61,29 @@ pub struct SegyMetadata<S> {
 }
 
 impl Trace {
-    /// Create a new trace from data diectly extracted from the SEG-Y file.
+    /// Construct a new "trace" from a [`TraceHeader`] and byte locations in the file or slice
+    /// where the trace data is kept. Thus this function can be used both for input and output
+    /// purposes.
+    /// ```
+    /// use giga_segy_core::{Trace, TraceHeader};
+    /// use std::io::Write;
+    ///
+    /// let mut fake_file = vec![];
+    ///
+    /// let data_start = 40_000;
+    /// // Use of a sensible method for creating the trace header is preferred,
+    /// // see for example `giga_segy_output`.
+    /// let th = unsafe { std::mem::transmute::<[u8;280], TraceHeader>([0; 280]) };
+    /// let data = (0..100i32).flat_map(|x| x.to_be_bytes()).collect::<Vec<_>>();
+    ///
+    /// // Pretend to write data to a file, f, here.
+    /// let written = fake_file.write(&data).unwrap();
+    ///
+    /// let tr = Trace::new(th, data_start, written);
+    /// assert_eq!(tr.get_start(), 40_000);
+    /// // NB: Length ignores the length of headers.
+    /// assert_eq!(tr.len(), 100 * 4);
+    /// ```
     pub fn new(trace_header: TraceHeader, data_start: usize, data_len: usize) -> Self {
         Trace {
             trace_header,

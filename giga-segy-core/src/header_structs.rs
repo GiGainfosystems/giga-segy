@@ -201,7 +201,7 @@ pub struct TraceHeader {
 }
 
 /// This structure represents a parsed binary header for a SEGY file.
-/// 
+///
 /// It should be noted that while the binary header  of a SEG-Y file is 400 bytes long
 /// and contains approximately 45 fields, this structure uses about 29 of these fields
 /// and rearranges then into 32 fields for convenience.

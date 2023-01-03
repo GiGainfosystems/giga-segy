@@ -16,7 +16,6 @@ pub type BitConverter = fn(&[u8]) -> Result<f32, TryFromSliceError>;
 /// ```
 /// # use giga_segy_core::bitconverter::converter_chooser;
 /// # use giga_segy_core::enums::SampleFormatCode;
-/// 
 /// let bytes_to_f32_converter: fn(&[u8]) -> Result<f32, _> =
 ///     converter_chooser(SampleFormatCode::Float32, false).unwrap();
 ///
@@ -170,11 +169,11 @@ pub fn converter_chooser(format: SampleFormatCode, le: bool) -> Result<BitConver
     Ok(f)
 }
 
-/// A helper function to convert ascii null terminated to string. This function assumes
-/// that the string is ascii and will truncate it at the first null byte.
+/// A helper function to convert ascii null terminated to string.
+///
+/// This function assumes that the string is ascii and will truncate it at the first null byte.
 /// ```
 /// # use giga_segy_core::bitconverter::ascii_bytes_to_string;
-///
 /// let input = b"I am an ascii string 123456!?";
 /// let output = ascii_bytes_to_string(input);
 /// assert_eq!(&output, "I am an ascii string 123456!?");

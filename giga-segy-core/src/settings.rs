@@ -17,7 +17,7 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "to_json", derive(Serialize, Deserialize))]
 /// This structure holds a list of various settings to be imported for the custom reading of
 /// byte locations of various variables in the headers and other things when interpreting a SEGY file.
-/// 
+///
 /// This structure does not allow direct manipulation of fields as in several cases not all possible
 /// values for that field are valid (eg byte indices are [`usize`], but a trace header is only 240 bytes long),
 /// and in other cases the value of one field may influence the value of another field.
@@ -290,7 +290,7 @@ impl SegySettings {
     }
 
     /// Sets the override for inline count.
-    /// 
+    ///
     /// While this function takes an [`i32`] value as an argument, it will throw an error if the
     /// value is negative. Furthermore, both [`Self::set_override_dim_x`] and [`Self::set_override_dim_y`]
     /// also set `crossline_min_max` and `inline_min_max` respectively. Since the minimum

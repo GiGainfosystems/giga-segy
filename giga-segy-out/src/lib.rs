@@ -41,14 +41,13 @@ use crate::settings::SegyWriteSettings;
 use crate::write_data::LosslessWriteableSegyData;
 use crate::write_headers::SegyHeaderToBytes;
 
-
 /// This structure gives several different ways of looking at trace coordinates.
 /// It is created once a trace has been written and moved into the [`SegyFile`]
 /// lookup.
 pub struct TraceCoordinates {
     /// Index of a trace in the order it is added to the file.
     pub idx: usize,
-    /// The start byte of the trace, including the header. 
+    /// The start byte of the trace, including the header.
     pub start_byte: usize,
     /// The start byt of the trace data.
     pub data_start_byte: usize,
@@ -83,7 +82,7 @@ pub struct SegyFile<S: SegyWriteSettings> {
 impl<S: SegyWriteSettings> SegyFile<S> {
     /// Create a file and return the handle to a writeable file. Traces can then be added
     /// one by one.
-    /// ``` 
+    /// ```
     /// use giga_segy_out::SegyFile;
     /// use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
     /// use giga_segy_core::enums::*;
@@ -91,7 +90,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     ///
     /// let dir = tempfile::tempdir().expect("Couldn't get tempfile.");
     /// let path = dir.path().join("my-first-segy.sgy");
-    /// 
+    ///
     /// let mut bin_header = BinHeader::default();
     /// bin_header.sample_format_code = SampleFormatCode::Float32;
     /// // The number of samples in either the binary or trace header must equal data vector length.
@@ -169,7 +168,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     /// the `LosslessWriteableSegyData` trait can be implemented for type
     /// conversions that are not lossless. The out of the box implementation
     /// is lossless.
-    /// ``` 
+    /// ```
     /// use giga_segy_out::SegyFile;
     /// use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
     /// use giga_segy_core::enums::*;
@@ -178,7 +177,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     ///
     /// let dir = tempfile::tempdir().expect("Couldn't get tempfile.");
     /// let path = dir.path().join("my-first-segy.sgy");
-    /// 
+    ///
     /// let mut bin_header = BinHeader::default();
     /// bin_header.sample_format_code = SampleFormatCode::Int32;
     /// // The number of samples in either the binary or trace header must equal data vector length.
@@ -202,7 +201,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     ///     let data = (i..(i+50)).collect::<Vec<i16>>();
     ///     file.add_trace_lossless(trace_header, None, data).unwrap();
     /// }
-    /// 
+    ///
     /// ```
     pub fn add_trace_lossless<T: LosslessWriteableSegyData>(
         &mut self,

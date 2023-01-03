@@ -34,7 +34,7 @@ use giga_segy_core::*;
 ///
 /// - The metadata associated with the settings needed to open the file.
 ///
-/// - A list of traces (consisting of the headers and "coordinates" that are used to access data) 
+/// - A list of traces (consisting of the headers and "coordinates" that are used to access data)
 ///
 /// - A lookup that speeds up access to individual traces.
 ///
@@ -57,7 +57,7 @@ impl SegyFile {
     /// use std::env::var;
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -97,7 +97,7 @@ impl SegyFile {
         };
         Ok(file)
     }
-    
+
     /// Get a reference to the [`SegySettings`] which were used when opening the file in this
     /// instance of [`SegyFile`].
     ///
@@ -105,7 +105,7 @@ impl SegyFile {
     /// use std::env::var;
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -125,7 +125,7 @@ impl SegyFile {
     /// use std::env::var;
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -151,7 +151,7 @@ impl SegyFile {
     /// use std::env::var;
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -188,7 +188,7 @@ impl SegyFile {
     /// use std::env::var;
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -242,7 +242,7 @@ impl SegyFile {
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
     /// use giga_segy_core::errors::RsgError;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -327,13 +327,13 @@ impl SegyFile {
     /// This function tries to get a data point at a particular index in the trace recording
     /// from a particular trace, returning it as a `f32` value.
     /// This function is less efficient than [`Self::get_trace_data_as_f32_from_trace`], so if multiple
-    /// data points are needed, then usually that function should be preferred. 
+    /// data points are needed, then usually that function should be preferred.
     /// ```
     /// use std::env::var;
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
     /// use giga_segy_core::errors::RsgError;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -376,7 +376,7 @@ impl SegyFile {
     /// use std::env::var;
     /// use std::path::PathBuf;
     /// use giga_segy_in::SegyFile;
-    /// 
+    ///
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
@@ -426,7 +426,6 @@ impl SegyFile {
         }
     }
 
-
     /// Get the indices for the traces with the minimum and maximum values for the x ensemble
     /// number. The traces can then be retrieved with [`Self::get_trace`].
     pub fn get_trace_idx_for_x_ensemble_min_max(&self) -> Option<[usize; 2]> {
@@ -447,7 +446,6 @@ impl SegyFile {
             _ => None,
         }
     }
-
 
     /// Get the indices for the traces with the minimum and maximum values for the y ensemble
     /// number. The traces can then be retrieved with [`Self::get_trace`].

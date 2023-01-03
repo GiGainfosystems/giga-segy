@@ -23,7 +23,7 @@ pub mod create_headers;
 mod integration_tests;
 mod settings;
 pub mod utils;
-mod write_data;
+pub mod write_data;
 pub mod write_headers;
 
 pub use giga_segy_core::enums;

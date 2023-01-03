@@ -11,7 +11,19 @@ use std::convert::TryInto;
 pub type BitConverter = fn(&[u8]) -> Result<f32, TryFromSliceError>;
 
 /// This function chooses the converter for the binary data.
-/// Doing this once per trace should be more efficient than doing it dynamically.
+///
+/// The converter should be chosen once per trace (or better still once per file) for efficiency.
+/// ```
+/// # use giga_segy_core::bitconverter::converter_chooser;
+/// # use giga_segy_core::enums::SampleFormatCode;
+/// 
+/// let bytes_to_f32_converter: fn(&[u8]) -> Result<f32, _> =
+///     converter_chooser(SampleFormatCode::Float32, false).unwrap();
+///
+/// let bytes = 42.0f32.to_be_bytes();
+/// let nmbr = bytes_to_f32_converter(&bytes[..]).unwrap();
+/// assert_eq!(nmbr, 42.);
+/// ```
 pub fn converter_chooser(format: SampleFormatCode, le: bool) -> Result<BitConverter, RsgError> {
     let f = match format {
         SampleFormatCode::IbmFloat32 => {
@@ -158,7 +170,19 @@ pub fn converter_chooser(format: SampleFormatCode, le: bool) -> Result<BitConver
     Ok(f)
 }
 
-/// A helper function to convert ascii null terminated to string
+/// A helper function to convert ascii null terminated to string. This function assumes
+/// that the string is ascii and will truncate it at the first null byte.
+/// ```
+/// # use giga_segy_core::bitconverter::ascii_bytes_to_string;
+///
+/// let input = b"I am an ascii string 123456!?";
+/// let output = ascii_bytes_to_string(input);
+/// assert_eq!(&output, "I am an ascii string 123456!?");
+///
+/// let input = [b'h', b'e', b'l', b'l', b'o', 0, b'w', b'o', b'r', b'l', b'd'];
+/// let output = ascii_bytes_to_string(&input[..]);
+/// assert_eq!(&output, "hello");
+/// ```
 pub fn ascii_bytes_to_string(bytes: &[u8]) -> String {
     let mut bytes = bytes.to_vec();
     let i = bytes.iter().position(|x| *x == 0).unwrap_or(bytes.len());

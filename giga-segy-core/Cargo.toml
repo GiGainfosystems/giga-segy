@@ -1,6 +1,6 @@
 [package]
 name = "giga-segy-core"
-version = "0.2.3"
+version = "0.2.4"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 links = ""

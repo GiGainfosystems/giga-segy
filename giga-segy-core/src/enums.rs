@@ -1,4 +1,10 @@
-//! This contains all of our lovely enums that are used in the header. Mmm. Enums!
+//! This contains all the enums that are used in the trace and binary headers.
+//!
+//! The SEG-Y format uses binary and trace headers (technically both headers are binary), which contain
+//! general metadata and other data which convey how the trace data is to be interpreted. In a lot of cases
+//! this information may only have certain values, which lends itself well to being represented by enums.
+//! (More information on this can be found in the SEG-Y_r2.0 (January 2017) document tables 2 and 3).
+//!
 //! As a general rule, enums that are found only in the binary header have fixed numerical values
 //! and return an error when an invalid value is found. Enums from the trace header can also
 //! return an undefined `Invalid` variant. This is needed because custom byte indices can be set for

@@ -149,7 +149,8 @@ impl SegyHeaderToBytes for BinHeader {
 
 /// Convert the trace header to bytes.
 ///
-/// NB: We cannot use the above trait as we also need values from the binary header.
+/// NB: We cannot use [`crate::write_headers::SegyHeaderToBytes`] as we also need values
+/// from the binary header.
 ///
 /// NB2: Because of how variable byte positions work, this can get a little bit silly.
 pub fn th_as_bytes_with_settings<S: SegyWriteSettings>(

@@ -1,5 +1,9 @@
 // Copyright (C) 2022 by GiGa infosystems
-//! This here to make pseudo-default headers.
+//! This module contains the traits for creating new instances of headers.
+//!
+//! It should be noted
+//! that implementing the traits here for new types and structures will probably not be too
+//! useful unless [`crate::write_headers::SegyHeaderToBytes`] is also implemented for the structure.
 use giga_segy_core::enums::*;
 use giga_segy_core::{BinHeader, TapeLabel, TraceHeader};
 
@@ -12,7 +16,7 @@ pub trait CreateBinHeader: SegyHeaderToBytes {
     /// Create a new binary header with basic information.
     fn new(
         no_traces: u16,
-        sampsle_interval: u16,
+        sample_interval: u16,
         no_samples: u16,
         sample_format_code: SampleFormatCode,
     ) -> Self;
@@ -31,13 +35,13 @@ pub trait CreateTraceHeader {
     /// Create a trace header using bin header and other data.
     ///
     /// NB: This function assumes that x and y coordinates are already split into
-    /// ensemble and scalar.
+    /// ensemble and scalar (see [`crate::utils::CoordinateScalar`]).
     fn new_2d(x_ensemble: i32, y_ensemble: i32, coordinate_scalar: i16) -> Self;
 
     /// Create a trace header using bin header and other data.
     ///
     /// NB: This function assumes that x and y coordinates are already split into
-    /// ensemble and scalar.
+    /// ensemble and scalar (see [`crate::utils::CoordinateScalar`]).
     fn new_3d(
         x_ensemble: i32,
         y_ensemble: i32,
@@ -48,6 +52,10 @@ pub trait CreateTraceHeader {
 }
 
 /// Creates an empty tape label.
+///
+/// All field values are set to zero, except [`TapeLabel::storage_unit_structure`],
+/// which is set to "RECORD", [`TapeLabel::binding_number`] which is set to "BXXX", and [`TapeLabel::max_block_size`],
+/// which is set to [`u32::MAX`].
 pub fn create_tape_label() -> TapeLabel {
     TapeLabel {
         storage_unit_seq_no: [0; 4],

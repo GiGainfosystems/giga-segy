@@ -17,10 +17,12 @@ use std::ops::Div;
 ///
 /// See the SEG-Y_r2.0 standard (January 2017), page 17 for more details.
 ///
-/// NB: The multiplier should be of the same type as the coordinates
+/// There are two points of note for this function:
+///
+/// * The multiplier should be of the same type as the coordinates
 /// that are being converted.
 ///
-/// NB2: SEG-Y stores scalars as [`i16`], so initial multipliers of a high
+/// * SEG-Y stores scalars as [`i16`], so initial multipliers of a high
 /// magnitude, or those from non-integer floats will be handled lossily.
 ///
 /// ```
@@ -59,11 +61,11 @@ where
 {
     /// Create a new scalar.
     ///
-    /// NB: If the value provided is outside of the range, [`None`] is returned.
+    /// * If the value provided is outside of the range, [`None`] is returned.
     ///
-    /// NB2: A multiplier MUST be a non-negative value.
+    /// * A multiplier MUST be a non-negative value.
     ///
-    /// NB3: If the multiplier is 100, the scalar is -100.
+    /// * If the multiplier is 100, the scalar is -100.
     ///
     /// ```
     /// # use giga_segy_out::utils::CoordinateScalar;
@@ -101,9 +103,9 @@ where
 
     /// Operate on a value converting to [`i32`] directly.
     ///
-    /// NB: This is useful if all coordinates are stored directly as [`i32`].
+    /// * This is useful if all coordinates are stored directly as [`i32`].
     ///
-    /// NB2: If the value cannot be converted to [`i32`] directly, [`None`] is returned.
+    /// * If the value cannot be converted to [`i32`] directly, [`None`] is returned.
     ///
     /// ```
     /// # use giga_segy_out::utils::CoordinateScalar;

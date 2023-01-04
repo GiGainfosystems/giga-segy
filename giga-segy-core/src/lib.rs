@@ -66,19 +66,18 @@ impl Trace {
     /// purposes.
     /// ```
     /// use giga_segy_core::{Trace, TraceHeader};
+    /// use giga_segy_out::create_headers::CreateTraceHeader;
     /// use std::io::Write;
     ///
     /// let mut fake_file = vec![];
     ///
     /// let data_start = 40_000;
-    /// // Use of a sensible method for creating the trace header is preferred,
-    /// // see for example `giga_segy_output`. This transmute will produce junk.
-    /// let th = unsafe { std::mem::transmute::<[u8;280], TraceHeader>([0; 280]) };
     /// let data = (0..100i32).flat_map(|x| x.to_be_bytes()).collect::<Vec<_>>();
     ///
     /// // Pretend to write data to a file, f, here.
     /// let written = fake_file.write(&data).unwrap();
     ///
+    /// let th = TraceHeader::default();
     /// let tr = Trace::new(th, data_start, written);
     /// assert_eq!(tr.get_start(), 40_000);
     /// // NB: Length ignores the length of headers.
@@ -156,7 +155,7 @@ impl<S> SegyMetadata<S> {
     }
 
     /// Get the text header as collection of short substrings. This function
-    /// copies the content of the text header.
+    /// clones the content of the text header.
     pub fn get_text_header_lines(&self) -> Vec<String> {
         self.text_header
             .chars()

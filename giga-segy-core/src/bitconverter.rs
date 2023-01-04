@@ -13,6 +13,8 @@ pub type BitConverter = fn(&[u8]) -> Result<f32, TryFromSliceError>;
 /// This function chooses the converter for the binary data.
 ///
 /// The converter should be chosen once per trace (or better still once per file) for efficiency.
+/// Importantly the `le` argument determines whether the bytes converted are assumed to be little endian
+/// or bid endian.
 /// ```
 /// # use giga_segy_core::bitconverter::converter_chooser;
 /// # use giga_segy_core::enums::SampleFormatCode;
@@ -162,7 +164,7 @@ pub fn converter_chooser(format: SampleFormatCode, le: bool) -> Result<BitConver
         }
         SampleFormatCode::FixPoint32 => {
             return Err(RsgError::BitConversionError {
-                msg: "FicPoint32 are obsolete.".to_string(),
+                msg: "FixPoint32 are obsolete.".to_string(),
             });
         }
     };
@@ -178,7 +180,7 @@ pub fn converter_chooser(format: SampleFormatCode, le: bool) -> Result<BitConver
 /// let output = ascii_bytes_to_string(input);
 /// assert_eq!(&output, "I am an ascii string 123456!?");
 ///
-/// let input = [b'h', b'e', b'l', b'l', b'o', 0, b'w', b'o', b'r', b'l', b'd'];
+/// let input = b"hello\0world";
 /// let output = ascii_bytes_to_string(&input[..]);
 /// assert_eq!(&output, "hello");
 /// ```

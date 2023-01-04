@@ -51,7 +51,7 @@ pub struct TraceCoordinates {
     pub start_byte: usize,
     /// The start byt of the trace data.
     pub data_start_byte: usize,
-    /// NB: Overall length with all headers.
+    /// Overall length with all headers.
     pub byte_len: usize,
 }
 
@@ -73,7 +73,7 @@ pub struct SegyFile<S: SegyWriteSettings> {
     /// A record of traces written.
     pub traces: Vec<Trace>,
     /// This is here to speed up the lookup of traces.
-    /// N2: I suspect that the lookup will not be useful.
+    // I suspect that the lookup will not be useful.
     pub lookup: fnv::FnvHashMap<usize, TraceCoordinates>,
     /// The file which the SEG-Y is being written to.
     pub file: File,
@@ -158,16 +158,16 @@ impl<S: SegyWriteSettings> SegyFile<S> {
         )
     }
 
-    #[allow(unused_variables)]
     /// This function tries to guarantee that types are not converted freely,
     /// but instead uses a trait that makes sure only appropriate data types
     /// can be written. For example, data in [`f64`] cannot be written as [`f32`],
     /// data as [`i64`] cannot be written as [`u16`], etc.
     ///
-    /// NB: For this it uses the [`LosslessWriteableSegyData`] trait. In theory
+    /// This function uses the [`LosslessWriteableSegyData`] trait. In theory
     /// the [`LosslessWriteableSegyData`] trait can be implemented for type
-    /// conversions that are not lossless. The out of the box implementation
-    /// is lossless.
+    /// conversions that are not lossless. The out of the box implementation,
+    /// however, only allows conversion between types where conversion is
+    /// theoretically lossless.
     /// ```
     /// use giga_segy_out::SegyFile;
     /// use giga_segy_core::{BinHeader, SegySettings, TraceHeader};

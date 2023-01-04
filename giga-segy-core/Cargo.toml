@@ -18,6 +18,9 @@ num-traits = "0.2"
 serde = { version = "1.0.40", features = ["derive"], optional = true }
 serde_json = { version = "1", optional = true }
 
+[dev-dependencies]
+giga-segy-out = { path = "../giga-segy-out" }
+
 [build-dependencies.cbindgen]
 version = "0.24"
 

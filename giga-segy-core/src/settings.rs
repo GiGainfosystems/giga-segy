@@ -140,7 +140,7 @@ impl SegySettings {
 
     /// Sets the trace format to the input.
     ///
-    /// NB: This will return an error if the format code is for a format which is not four bytes long.
+    /// This function will return an error if the format code is for a format which is not four bytes long.
     /// This convention is maintained because the fields of the trace header used to store coordinate
     /// values are 4 bytes long and therefore it should not usually be possible for SEG-Y files that
     /// even pretend to follow the standard to store coordinates in a 2, 3 or 8 byte format.

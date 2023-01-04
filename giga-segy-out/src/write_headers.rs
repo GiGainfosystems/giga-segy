@@ -149,10 +149,10 @@ impl SegyHeaderToBytes for BinHeader {
 
 /// Convert the trace header to bytes.
 ///
-/// NB: We cannot use [`crate::write_headers::SegyHeaderToBytes`] as we also need values
+/// * We cannot use [`crate::write_headers::SegyHeaderToBytes`] as we also need values
 /// from the binary header.
 ///
-/// NB2: Because of how variable byte positions work, it is possible to use settings to assign
+/// * Because of how variable byte positions work, it is possible to use settings to assign
 /// overlapping byte positions or overwrite other fields in the trace header when overriding
 /// byte indices using the settings (if the given settings `S` support overriding byte indices).
 /// Care is therefore advised.

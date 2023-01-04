@@ -38,7 +38,8 @@ use giga_segy_core::*;
 ///
 /// - A lookup that speeds up access to individual traces.
 ///
-/// NB: The trace headers are parsed, but the data is contained in the memory map.
+/// It should be noted that while the trace headers are parsed, the trace data itself
+/// is contained in the memory map.
 pub struct SegyFile {
     pub(crate) metadata: SegyMetadata<SegySettings>,
     pub(crate) traces: Vec<Trace>,
@@ -180,7 +181,7 @@ impl SegyFile {
 
     /// Get the text header as a collection of short substrings.
     ///
-    /// NB: This function splits the header into 80 character substrings
+    /// This function splits the header into 80 character long substrings
     /// which are then copied to owned strings. If the highest performance is
     /// required, [`Self::get_text_header`] is recommended instead.
     ///
@@ -348,7 +349,7 @@ impl SegyFile {
     /// let no_this_fails = file.get_trace_data_point_as_f32_from_trace(third_trace, 999_999_999);
     /// assert!(matches!(
     ///     no_this_fails.unwrap_err(),
-    ///     RsgError::TracePointOutOfBounds { idx } if idx == 999_999_999
+    ///     RsgError::TracePointOutOfBounds { idx: 999_999_999 }
     /// ));
     /// ```
     pub fn get_trace_data_point_as_f32_from_trace(

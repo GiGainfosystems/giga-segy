@@ -4,6 +4,43 @@
 //! The library was designed to follow the SEG Technial Standards Committee's
 //! SEG-Y_r2.0 standard (from January 2017).
 //!
+//! The interface allows fairly simple extraction of data from trace headers and traces themselves.
+//! Parameters such as coordinate format and file endianness is automatically determined.
+//! If the file is written with non-standard byte locations for inline, crossline or other data,
+//! or if it is known that there are other "tricks" to it, [`SegySettings`] can be adjusted to
+//! to reflect this.
+//! ```
+//! use std::env::var;
+//! use std::path::PathBuf;
+//! use giga_segy_in::SegyFile;
+//!
+//! let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
+//! root.pop();
+//! let name = root.join("testdata").join("DutchMiniHead.sgy");
+//!
+//! let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+//!
+//! let text_header: &str = file.get_text_header();
+//! // SEG-Y text headers should always have 3200 character.
+//! assert_eq!(text_header.len(), 3200);
+//! println!("Text header: {:?}", text_header);
+//!
+//! let bin_header = file.get_bin_header();
+//! println!("Bin header: {}", bin_header);
+//!
+//! // Get the data in the order of appearance of traces in the file.
+//! // Of course there are more organised ways of doing this, but for a demo, this will do.
+//! for trace in file.traces_iter() {
+//!     println!("Trace header: {}", trace.get_header());
+//!     let data:Vec<f32> = file.get_trace_data_as_f32_from_trace(trace).unwrap();
+//!     if data.len() > 9 {
+//!         println!("Data: {:?}", &data[0..10]);
+//!     } else {
+//!         panic!("The traces in `DutchMiniHead` are at least this long.");    
+//!     }
+//! }
+//! ```
+//!
 //! This library is not designed for editing of SEG-Y files, although it can theoretically be accomplished
 //! with the clever use of `giga_segy_in` and `giga_segy_out`, we do not recommend this.
 #![allow(clippy::derive_partial_eq_without_eq)]

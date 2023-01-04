@@ -55,8 +55,8 @@ pub enum RsgError {
     ParseEnum { f: String, code: u16 },
     /// Map file error (this is just a `std::io` error when mapping files).
     MapFile(std::io::Error),
-    /// Map file error.
     #[cfg(feature = "to_json")]
+    /// Serialisation/Deserialisation error.
     SerdeError(serde_json::Error),
 }
 

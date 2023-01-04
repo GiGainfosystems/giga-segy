@@ -1,6 +1,6 @@
 [package]
 name = "giga-segy-in"
-version = "0.2.4"
+version = "0.3.0"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 
@@ -18,3 +18,4 @@ num = "0.4"
 [features]
 default = []
 to_json = ["giga-segy-core/to_json"]
+serialize = ["giga-segy-core/serialize"]

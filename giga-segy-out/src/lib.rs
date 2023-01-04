@@ -4,7 +4,8 @@
 //! different settings and sample coordinate formats.
 //!
 //! The library was designed to follow the SEG Technial Standards Committee's
-//! SEG-Y_r2.0 standard (from January 2017).
+//! [SEG-Y_r2.0 standard](<https://seg.org/Portals/0/SEG/News%20and%20Resources/Technical%20Standards/seg_y_rev2_0-mar2017.pdf>)
+//! (from January 2017).
 //!
 //! This library is not designed for editing of SEG-Y files, although it can theoretically be accomplished
 //! with the clever use of `giga_segy_in`. However we do not recommend this.

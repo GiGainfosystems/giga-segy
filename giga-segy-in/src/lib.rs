@@ -1,8 +1,9 @@
 //! This is a simplified library for reading SEG-Y files into rust. It is designed for efficient
 //! reading of SEG-Y headers and data without holding potentially very large SEG-Y files in memory.
 //!
-//! The library was designed to follow the SEG Technial Standards Committee's
-//! SEG-Y_r2.0 standard (from January 2017).
+//! The library was designed to follow the SEG Technical Standards Committee's
+//! [SEG-Y_r2.0 standard](<https://seg.org/Portals/0/SEG/News%20and%20Resources/Technical%20Standards/seg_y_rev2_0-mar2017.pdf>)
+//! (from January 2017).
 //!
 //! The interface allows fairly simple extraction of data from trace headers and traces themselves.
 //! Parameters such as coordinate format and file endianness is automatically determined.

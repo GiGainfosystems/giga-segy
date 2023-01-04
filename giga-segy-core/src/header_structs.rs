@@ -281,7 +281,8 @@ pub struct BinHeader {
     /// Determined from bytes 3297 - 3300 of the SEG-Y file, (96..100) of the binary header.
     /// This library does not support all variants, only complete LE or complete BE.
     ///
-    /// See the SEG-Y_r2.0 (January 2017) standard, page 9, for more details.
+    /// See the [SEG-Y_r2.0 standard](<https://seg.org/Portals/0/SEG/News%20and%20Resources/Technical%20Standards/seg_y_rev2_0-mar2017.pdf>)
+    /// (January 2017), page 9, for more details.
     pub binary_flag_direction_is_le: bool,
 }
 

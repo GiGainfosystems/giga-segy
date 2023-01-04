@@ -186,7 +186,8 @@ impl SegySettings {
     /// if the value given overflows this data type the function will return an error.
     ///
     /// Furthermore, the value given must already be in the format used by SEG-Y (see the
-    /// SEG-Y_r2.0 standard (January 2017), page 17 for more details).
+    /// [SEG-Y_r2.0 standard](<https://seg.org/Portals/0/SEG/News%20and%20Resources/Technical%20Standards/seg_y_rev2_0-mar2017.pdf>)
+    /// (January 2017), page 17 for more details).
     /// ```
     /// # use giga_segy_core::settings::*;
     /// let mut settings = SegySettings::default();

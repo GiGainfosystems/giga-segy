@@ -2,7 +2,8 @@
 //! This module contains the [`CoordinateScalar`] structure which deals with the somewhat unusual
 //! way that SEG-Y uses to express scaling factor of coordinates.
 //!
-//! See the SEG-Y_r2.0 standard (january 2017), page 17 for more details.
+//! See the [SEG-Y_r2.0 standard](<https://seg.org/Portals/0/SEG/News%20and%20Resources/Technical%20Standards/seg_y_rev2_0-mar2017.pdf>)
+//! (january 2017), page 17 for more details.
 use num::{One, ToPrimitive, Zero};
 use std::cmp::Ordering;
 use std::fmt::Debug;
@@ -15,7 +16,8 @@ use std::ops::Div;
 /// corrects this flaw. Scalars are somewhat unintuitive, so this
 /// utility is provided to convert normal multipliers to scalars.
 ///
-/// See the SEG-Y_r2.0 standard (January 2017), page 17 for more details.
+/// See the [SEG-Y_r2.0 standard](<https://seg.org/Portals/0/SEG/News%20and%20Resources/Technical%20Standards/seg_y_rev2_0-mar2017.pdf>)
+/// (January 2017), page 17 for more details.
 ///
 /// There are two points of note for this function:
 ///

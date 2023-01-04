@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 /// This structure holds a list of various settings to be imported for the custom reading of

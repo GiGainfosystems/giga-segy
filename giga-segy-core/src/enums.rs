@@ -23,7 +23,7 @@ use crate::errors::*;
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum OrderTraceBy {
@@ -39,7 +39,7 @@ pub enum OrderTraceBy {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum SampleFormatCode {
@@ -99,7 +99,7 @@ impl SampleFormatCode {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum TraceSortingCode {
@@ -128,7 +128,7 @@ impl TraceSortingCode {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum SweepTypeCode {
@@ -152,7 +152,7 @@ impl SweepTypeCode {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum TaperType {
@@ -174,7 +174,7 @@ impl TaperType {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum CorrelatedDataTraces {
@@ -195,7 +195,7 @@ impl CorrelatedDataTraces {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum BinaryGainRecovered {
@@ -216,7 +216,7 @@ impl BinaryGainRecovered {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum AmplitudeRecoveryMethod {
@@ -239,7 +239,7 @@ impl AmplitudeRecoveryMethod {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum MeasurementSystem {
@@ -260,7 +260,7 @@ impl MeasurementSystem {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum ImpulseSignalPolarity {
@@ -281,7 +281,7 @@ impl ImpulseSignalPolarity {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum VibratoryPolarityCode {
@@ -308,7 +308,7 @@ impl VibratoryPolarityCode {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum FixedLengthTraces {
@@ -340,7 +340,7 @@ impl FixedLengthTraces {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum TimeBasisCode {
@@ -364,7 +364,7 @@ impl TimeBasisCode {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum TraceIdCode {
@@ -425,7 +425,7 @@ impl TraceIdCode {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum DataUse {
@@ -446,7 +446,7 @@ impl DataUse {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum CoordinateUnits {
@@ -469,7 +469,7 @@ impl CoordinateUnits {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum GainType {
@@ -491,7 +491,7 @@ impl GainType {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum Correlated {
@@ -512,7 +512,7 @@ impl Correlated {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum SweepType {
@@ -539,7 +539,7 @@ impl SweepType {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum OverTravel {
@@ -560,7 +560,7 @@ impl OverTravel {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum TraceValueUnit {
@@ -589,7 +589,7 @@ impl TraceValueUnit {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum TransductionUnits {
@@ -618,7 +618,7 @@ impl TransductionUnits {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum SourceType {
@@ -646,7 +646,7 @@ impl SourceType {
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub enum SourceMeasurementUnit {

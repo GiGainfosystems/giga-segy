@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub struct TraceHeader {
@@ -211,7 +211,7 @@ pub struct TraceHeader {
 #[derive(Debug, Clone, PartialEq)]
 #[repr(C)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub struct BinHeader {
@@ -322,7 +322,7 @@ pub struct TapeLabel {
 /// has been read, but is not stored.
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(
-    any(feature = "to_json", feature = "serialize"),
+    any(feature = "to_json", feature = "serde"),
     derive(Serialize, Deserialize)
 )]
 pub struct ReadableTapeLabel {

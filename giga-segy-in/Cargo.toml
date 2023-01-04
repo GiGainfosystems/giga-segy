@@ -18,4 +18,4 @@ num = "0.4"
 [features]
 default = []
 to_json = ["giga-segy-core/to_json"]
-serialize = ["giga-segy-core/serialize"]
+serde = ["giga-segy-core/serde"]

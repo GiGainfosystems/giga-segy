@@ -8,6 +8,7 @@
 //!
 //! This library is not designed for editing of SEG-Y files, although it can theoretically be accomplished
 //! with the clever use of `giga_segy_in`. However we do not recommend this.
+#![allow(clippy::derive_partial_eq_without_eq)]
 extern crate fnv;
 extern crate giga_segy_core;
 extern crate num;

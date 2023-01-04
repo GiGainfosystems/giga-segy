@@ -14,7 +14,7 @@ pub type BitConverter = fn(&[u8]) -> Result<f32, TryFromSliceError>;
 ///
 /// The converter should be chosen once per trace (or better still once per file) for efficiency.
 /// Importantly the `le` argument determines whether the bytes converted are assumed to be little endian
-/// or bid endian.
+/// or big endian.
 /// ```
 /// # use giga_segy_core::bitconverter::converter_chooser;
 /// # use giga_segy_core::enums::SampleFormatCode;

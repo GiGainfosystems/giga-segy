@@ -26,5 +26,5 @@ version = "0.24"
 
 [features]
 default = []
-serialize = ["serde"]
+serde = ["dep:serde"]
 to_json = ["serde", "serde_json"]

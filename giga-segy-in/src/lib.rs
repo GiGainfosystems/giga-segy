@@ -6,6 +6,7 @@
 //!
 //! This library is not designed for editing of SEG-Y files, although it can theoretically be accomplished
 //! with the clever use of `giga_segy_in` and `giga_segy_out`, we do not recommend this.
+#![allow(clippy::derive_partial_eq_without_eq)]
 extern crate encoding8;
 extern crate memmap2;
 extern crate num;

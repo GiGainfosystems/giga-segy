@@ -1,10 +1,11 @@
 //! This library is the foundation for the `rsg-in` and `rsg-out` crates.
+#![allow(clippy::derive_partial_eq_without_eq)]
 extern crate num;
 #[macro_use]
 extern crate num_derive;
 extern crate ibmfloat;
 
-#[cfg(any(feature = "to_json",feature = "serialize"))]
+#[cfg(any(feature = "to_json", feature = "serde"))]
 extern crate serde;
 #[cfg(feature = "to_json")]
 extern crate serde_json;

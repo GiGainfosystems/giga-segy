@@ -115,7 +115,7 @@ impl SegySettings {
         self.order_trace_by = order;
     }
 
-    /// Sets the endiannss to LE if true and BE if false
+    /// Sets the endianness to LE if true and BE if false
     pub fn set_override_to_le(&mut self, le: bool) {
         self.override_to_le = Some(le);
     }

@@ -1,4 +1,5 @@
-//! This library is the foundation for the `rsg-in` and `rsg-out` crates.
+//! This library is the foundation for the `giga-segy-in` and `giga-segy-out` crates. It can be built either
+//! with serialization support, or in a slightly more lightweight manner without it (see features).
 #![allow(clippy::derive_partial_eq_without_eq)]
 extern crate num;
 #[macro_use]

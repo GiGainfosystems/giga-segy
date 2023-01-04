@@ -12,8 +12,8 @@ use tinyvec::TinyVec;
 /// This exists to save us a lot of typing.
 pub(crate) type TVu8 = TinyVec<[u8; 8]>;
 
-/// This trait allows a new data type to be added to `LosslessWriteableSegyData` and may be useful
-/// for those who extensively use exotic data types.
+/// This trait allows a new data type to be added for lossless writing and may be useful
+/// for those who extensively use exotic data types and need to have checks in place.
 /// ```
 /// # use giga_segy_out::write_data::LosslessWriteableSegyData;
 /// # use giga_segy_core::enums::SampleFormatCode;
@@ -37,7 +37,7 @@ pub(crate) type TVu8 = TinyVec<[u8; 8]>;
 /// ```
 pub trait LosslessWriteableSegyData: ToPrimitive + Debug {
     /// This function exists to check whether the given type is compatible with lossless
-    /// conversion with a given format. It is used as a validation check in `SegyFile::add_trace_lossless`,
+    /// conversion with a given format. It is used as a validation check in [`crate::SegyFile::add_trace_lossless`],
     /// but it is encouraged to use it as a sanity check when writing the SEG-Y writer.
     /// ```
     /// # use giga_segy_out::write_data::LosslessWriteableSegyData;

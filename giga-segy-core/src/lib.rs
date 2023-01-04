@@ -47,9 +47,9 @@ pub struct Trace {
     pub(crate) trace_byte_len: usize,
 }
 
-/// This structure contains all of the metadata for opening a segy file.
+/// This structure contains all of the metadata for opening a SEG-Y file.
 ///
-/// Different implementations of SegyMetadata can then be made, depending on what type `S` is
+/// Different implementations of [`SegyMetadata`] can then be made, depending on what type `S` is
 /// used for the settings. In general [`SegyMetadata`] is used internally by `giga_segy_input`
 /// and `giga_segy_output`, but may also prove suitable for uses elsewhere.
 pub struct SegyMetadata<S> {
@@ -72,7 +72,7 @@ impl Trace {
     ///
     /// let data_start = 40_000;
     /// // Use of a sensible method for creating the trace header is preferred,
-    /// // see for example `giga_segy_output`.
+    /// // see for example `giga_segy_output`. This transmute will produce junk.
     /// let th = unsafe { std::mem::transmute::<[u8;280], TraceHeader>([0; 280]) };
     /// let data = (0..100i32).flat_map(|x| x.to_be_bytes()).collect::<Vec<_>>();
     ///
@@ -155,8 +155,8 @@ impl<S> SegyMetadata<S> {
         &self.extended_headers
     }
 
-    /// Get the text header as collection of short substrings.
-    /// NB: This is a horrifically wasteful waste of a function.
+    /// Get the text header as collection of short substrings. This function
+    /// copies the content of the text header.
     pub fn get_text_header_lines(&self) -> Vec<String> {
         self.text_header
             .chars()
@@ -177,7 +177,7 @@ impl<S> SegyMetadata<S> {
         self.tape_label.as_ref().map(|l| l.to_readable())
     }
 
-    /// This function gets all the fields of SegyMetadata and discards the instance. Used to get all
+    /// This function gets all the fields of [`SegyMetadata`] and discards the instance. Used to get all
     /// data in an efficient manner.
     /// NB: The internal mapping is discarded in the process.
     pub fn deconstruct(self) -> (Option<TapeLabel>, String, Vec<String>, BinHeader, S) {

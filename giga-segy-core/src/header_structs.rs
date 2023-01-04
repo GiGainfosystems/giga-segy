@@ -311,7 +311,7 @@ pub struct TapeLabel {
     // The last ten bytes are reserved.
 }
 
-/// This is a rust readable version of the `TapeLabel` structure, which can be generated after the file
+/// This is a rust readable version of the [`TapeLabel`] structure, which can be generated after the file
 /// has been read, but is not stored.
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "to_json", derive(Serialize, Deserialize))]
@@ -330,7 +330,7 @@ pub struct ReadableTapeLabel {
 }
 
 impl TapeLabel {
-    /// Converts the C compatible `TapeLabel` to a rust compatible `ReadableTapeLabel`
+    /// Converts the C compatible [`TapeLabel`] to a rust compatible [`ReadableTapeLabel`]
     pub fn to_readable(&self) -> ReadableTapeLabel {
         ReadableTapeLabel {
             storage_unit_seq_no: ascii_bytes_to_string(&self.storage_unit_seq_no),

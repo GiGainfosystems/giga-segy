@@ -232,9 +232,9 @@ impl SegyFile {
         }
     }
 
-    /// Gets the trace data for a trace with a given index as a `Vec<f32>`. In this case, if
+    /// Gets the trace data for a trace with a given index as a [`Vec<f32>`]. In this case, if
     /// the index is out of bounds, an error is returned to reflect that there was a failure
-    /// to retrieve the data. If the data is not in an `f32` format, it is converted to `f32`
+    /// to retrieve the data. If the data is not in an [`f32`] format, it is converted to [`f32`]
     /// with potential loss of precision.
     ///
     /// ```
@@ -267,7 +267,7 @@ impl SegyFile {
         )
     }
 
-    /// Get the trace for a given index as a `Vec<u8>`. This is useful if there
+    /// Get the trace for a given index as a [`Vec<u8>`]. This is useful if there
     /// is concern for precision loss, or the file contains an unusual data type (eg paired data).
     ///
     /// As with [`Self::get_trace_data_as_f32`], if the trace is not found, an error is returned.
@@ -282,7 +282,7 @@ impl SegyFile {
         )
     }
 
-    /// Retrives the trace data for a given [`Trace`] from the same [`SegyFile`] as a `Vec<f32>`.
+    /// Retrives the trace data for a given [`Trace`] from the same [`SegyFile`] as a [`Vec<f32>`].
     /// If one is already holding a reference to a trace, this function should be preferred
     /// over [`Self::get_trace_data_as_f32`].
     pub fn get_trace_data_as_f32_from_trace(&self, t: &Trace) -> Result<Vec<f32>, RsgError> {
@@ -294,7 +294,7 @@ impl SegyFile {
         )
     }
 
-    /// Retrives the trace data for a given [`Trace`] from the same [`SegyFile`] as a `Vec<u8>`.
+    /// Retrives the trace data for a given [`Trace`] from the same [`SegyFile`] as a [`Vec<u8>`].
     /// If one is already holding a reference to a trace, this function should be preferred
     /// over [`Self::get_trace_data_as_bytes`].
     pub fn get_trace_data_as_bytes_from_trace(&self, t: &Trace) -> Result<Vec<u8>, RsgError> {
@@ -307,7 +307,7 @@ impl SegyFile {
     }
 
     /// This function tries to get a data point at a particular index in the trace recording
-    /// from a particular trace. Returns it as an unprocessed byte slice as an owned `Vec<u8>`.
+    /// from a particular trace. Returns it as an unprocessed byte slice as an owned [`Vec<u8>`].
     /// This function is less efficient than [`Self::get_trace_data_as_bytes_from_trace`], so if multiple
     /// data points are needed, then usually that function should be preferred.  
     pub fn get_trace_data_point_as_bytes_from_trace(
@@ -325,7 +325,7 @@ impl SegyFile {
     }
 
     /// This function tries to get a data point at a particular index in the trace recording
-    /// from a particular trace, returning it as a `f32` value.
+    /// from a particular trace, returning it as a [`f32`] value.
     /// This function is less efficient than [`Self::get_trace_data_as_f32_from_trace`], so if multiple
     /// data points are needed, then usually that function should be preferred.
     /// ```

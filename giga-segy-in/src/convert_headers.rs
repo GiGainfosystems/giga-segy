@@ -11,7 +11,7 @@ use num::FromPrimitive;
 
 use std::convert::TryInto;
 
-/// This trait allows a header to be created from bytes, potentially using SegySettings
+/// This trait allows a header to be created from bytes, potentially using [`SegySettings`]
 /// to guide the creation process.
 ///
 /// We do not expect this trait to be of use for most users of this crate, but it
@@ -21,7 +21,7 @@ pub trait HeaderFromBytes: Sized {
     fn from_bytes(bytes: &[u8], settings: &SegySettings) -> Result<Self, RsgError>;
 }
 
-/// This trait allows a header to be created from bytes, potentially using SegySettings
+/// This trait allows a header to be created from bytes, potentially using [`SegySettings`]
 /// and binary header data to guide the creation process.
 ///
 /// We do not expect this trait to be of use for most users of this crate,

@@ -161,11 +161,11 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     #[allow(unused_variables)]
     /// This function tries to guarantee that types are not converted freely,
     /// but instead uses a trait that makes sure only appropriate data types
-    /// can be written. For example, data in `f64` cannot be written as `f32`,
-    /// data as `i64` cannot be written as `u16`, etc.
+    /// can be written. For example, data in [`f64`] cannot be written as [`f32`],
+    /// data as [`i64`] cannot be written as [`u16`], etc.
     ///
-    /// NB: For this it uses the `LosslessWriteableSegyData` trait. In theory
-    /// the `LosslessWriteableSegyData` trait can be implemented for type
+    /// NB: For this it uses the [`LosslessWriteableSegyData`] trait. In theory
+    /// the [`LosslessWriteableSegyData`] trait can be implemented for type
     /// conversions that are not lossless. The out of the box implementation
     /// is lossless.
     /// ```

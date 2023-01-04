@@ -20,7 +20,7 @@ use std::ops::Div;
 /// NB: The multiplier should be of the same type as the coordinates
 /// that are being converted.
 ///
-/// NB2: SEG-Y stores scalars as i16, so initial multipliers of a high
+/// NB2: SEG-Y stores scalars as [`i16`], so initial multipliers of a high
 /// magnitude, or those from non-integer floats will be handled lossily.
 ///
 /// ```
@@ -59,7 +59,7 @@ where
 {
     /// Create a new scalar.
     ///
-    /// NB: If the value provided is outside of the range, `None` is returned.
+    /// NB: If the value provided is outside of the range, [`None`] is returned.
     ///
     /// NB2: A multiplier MUST be a non-negative value.
     ///
@@ -132,7 +132,28 @@ where
         self.original_multiplier.clone()
     }
 
-    /// Get the scaler as the final i16 value.
+    /// Get the scaler as the final [`i16`] value that is to be written to the SEG-Y [`crate::TraceHeader`].
+    /// ```
+    /// use giga_segy_out::TraceHeader;
+    /// use giga_segy_out::create_headers::CreateTraceHeader;
+    /// use giga_segy_out::utils::CoordinateScalar;
+    ///
+    /// // Oh no! Our coordinates can't be stored as `i32` without losing precision.
+    /// let (x, y) = (39874.34f32, 12312.12f32);
+    /// // ...But if we multiply by 100, they can!
+    /// let s = CoordinateScalar::from_multiplier(0.01f32).unwrap();
+    ///
+    /// let th = TraceHeader::new_2d(
+    ///     s.scale_to_i32(x).unwrap(),
+    ///     s.scale_to_i32(y).unwrap(),
+    ///     s.writeable_scalar()
+    /// );
+    ///
+    /// // Let's check.
+    /// assert_eq!(th.x_ensemble, 3987434);
+    /// assert_eq!(th.y_ensemble, 1231212);
+    /// assert_eq!(th.coordinate_scalar, -100);
+    /// ```
     pub fn writeable_scalar(&self) -> i16 {
         self.writeable_scalar
     }

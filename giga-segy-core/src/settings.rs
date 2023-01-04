@@ -1,4 +1,4 @@
-//! This module contains the `SegySettings` structure which can be used to customise the SEG-Y
+//! This module contains the [`SegySettings`] structure which can be used to customise the SEG-Y
 //! parsing.
 //!
 //! NB: It should be noted that since few files are in keeping with the proper SEG-Y format, this
@@ -141,7 +141,7 @@ impl SegySettings {
     /// Sets the trace format to the input.
     ///
     /// NB: This will return an error if the format code is for a format which is not four bytes long.
-    /// This convention in maintained, because the fields of the trace header used to store coordinate
+    /// This convention is maintained because the fields of the trace header used to store coordinate
     /// values are 4 bytes long and therefore it should not usually be possible for SEG-Y files that
     /// even pretend to follow the standard to store coordinates in a 2, 3 or 8 byte format.
     /// ```
@@ -183,7 +183,7 @@ impl SegySettings {
     /// if the value given overflows this data type the function will return an error.
     ///
     /// Furthermore, the value given must already be in the format used by SEG-Y (see the
-    /// SEG-Y_r2.0 standard (january 2017), page 17 for more details).
+    /// SEG-Y_r2.0 standard (January 2017), page 17 for more details).
     /// ```
     /// # use giga_segy_core::settings::*;
     /// let mut settings = SegySettings::default();
@@ -366,17 +366,17 @@ impl SegySettings {
         }
     }
 
-    /// Get the physical `u` vector.
+    /// Set the physical `u` vector to something other than what is found in headers.
     pub fn set_override_u(&mut self, u: [f64; 3]) {
         self.override_u = Some(u)
     }
 
-    /// Get the physical `v` vector.
+    /// Set the physical `v` vector to something other than what is found in headers.
     pub fn set_override_v(&mut self, v: [f64; 3]) {
         self.override_v = Some(v);
     }
 
-    /// Get the physcial sample interval (NB: one dimensionsal by definition.)
+    /// Set an override for the physical sample interval (NB: one dimensionsal by definition.)
     pub fn set_override_sample_interval(&mut self, t: f64) {
         self.override_sample_interval = Some(t);
     }
@@ -507,6 +507,22 @@ impl SegySettings {
         self.order_trace_by
     }
 
+    /// Check whether a given inline and crossline number will be in bounds
+    /// according to the options. If no inline/crossline min-max is set, the
+    /// return is [`true`].
+    /// ```
+    /// # use giga_segy_core::settings::SegySettings;
+    /// let mut settings = SegySettings::default();
+    /// assert!(settings.trace_in_bounds(99999, -99999));
+    ///
+    /// settings.set_inlne_min_max([50, 2000]);
+    /// assert_ne!(settings.trace_in_bounds(99999, -99999), true);
+    /// assert!(settings.trace_in_bounds(100, -99999));
+    ///
+    /// settings.set_crossline_min_max([50, 2000]);
+    /// assert_ne!(settings.trace_in_bounds(100, -99999), true);
+    /// assert!(settings.trace_in_bounds(100, 100));
+    /// ```
     pub fn trace_in_bounds(&self, inline: i32, crossline: i32) -> bool {
         let inline_ok = if let Some([min, max]) = self.inline_min_max {
             inline <= max && inline >= min

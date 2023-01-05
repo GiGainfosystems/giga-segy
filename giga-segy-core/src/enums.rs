@@ -14,7 +14,7 @@
 //! is a need to be able to return a "non value" without crashing (but also ideally without too many)
 //! layers of complexity.
 use num::FromPrimitive;
-#[cfg(any(feature = "to_json", feature = "serde"))]
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 use crate::errors::*;
@@ -22,10 +22,7 @@ use crate::errors::*;
 /// Choose which of the header lines to count traces by.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum OrderTraceBy {
     Default = 1,
     TraceSequenceOnLine = 2,
@@ -38,10 +35,7 @@ pub enum OrderTraceBy {
 /// From bytes 3225-3226  (25-26) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum SampleFormatCode {
     IbmFloat32 = 1,
     Int32 = 2,
@@ -98,10 +92,7 @@ impl SampleFormatCode {
 /// From bytes 3229-3230 (29-30) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum TraceSortingCode {
     Other = -1,
     Unknown = 0,
@@ -127,10 +118,7 @@ impl TraceSortingCode {
 /// From bytes 3239-3240 (39-40) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum SweepTypeCode {
     Unspecified = 0,
     Linear = 1,
@@ -151,10 +139,7 @@ impl SweepTypeCode {
 /// Also in bytes 139-140 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum TaperType {
     Unspecified = 0,
     Linear = 1,
@@ -173,10 +158,7 @@ impl TaperType {
 /// 3249-3250 (49-50) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum CorrelatedDataTraces {
     Unspecified = 0,
     No = 1,
@@ -194,10 +176,7 @@ impl CorrelatedDataTraces {
 /// From bytes 3251-3252 (51-52) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum BinaryGainRecovered {
     Unspecified = 0,
     Yes = 1,
@@ -215,10 +194,7 @@ impl BinaryGainRecovered {
 /// From bytes 3253-3254 (53-54) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum AmplitudeRecoveryMethod {
     Unspecified = 0,
     None = 1,
@@ -238,10 +214,7 @@ impl AmplitudeRecoveryMethod {
 /// From bytes 3255-3256 (55-56) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum MeasurementSystem {
     Unspecified = 0,
     Meters = 1,
@@ -259,10 +232,7 @@ impl MeasurementSystem {
 /// From bytes 3257-3258 (57-58) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum ImpulseSignalPolarity {
     Unspecified = 0,
     IncreasePressureMinus = 1,
@@ -280,10 +250,7 @@ impl ImpulseSignalPolarity {
 /// From bytes 3259-3260 (59-60) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum VibratoryPolarityCode {
     Unspecified = 0,
     From338 = 1,
@@ -307,10 +274,7 @@ impl VibratoryPolarityCode {
 /// From bytes 3503-3504 (303-304) of the binary header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum FixedLengthTraces {
     Yes = 1,
     No = 0,
@@ -339,10 +303,7 @@ impl FixedLengthTraces {
 /// Alternatively bytes 167-168 of a standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum TimeBasisCode {
     Unspecified = 0,
     Local = 1,
@@ -363,10 +324,7 @@ impl TimeBasisCode {
 /// From bytes 29-30 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum TraceIdCode {
     Other = -1,
     Unknown = 0,
@@ -424,10 +382,7 @@ impl TraceIdCode {
 /// From bytes 35-36 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum DataUse {
     Unspecified = 0,
     Production = 1,
@@ -445,10 +400,7 @@ impl DataUse {
 /// From bytes 89-90 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum CoordinateUnits {
     Unspecified = 0,
     Length = 1,
@@ -468,10 +420,7 @@ impl CoordinateUnits {
 ///From bytes 119-120 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum GainType {
     Unspecified = 0,
     Fixed = 1,
@@ -490,10 +439,7 @@ impl GainType {
 // From bytes 125-126 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum Correlated {
     Unspecified = 0,
     No = 1,
@@ -511,10 +457,7 @@ impl Correlated {
 /// From bytes 133-134 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum SweepType {
     Unspecified = 0,
     Linear = 1,
@@ -538,10 +481,7 @@ impl SweepType {
 /// Found in bytes 179-180 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum OverTravel {
     Unspecified = 0,
     Up = 1,
@@ -559,10 +499,7 @@ impl OverTravel {
 /// Found in bytes 203-204 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum TraceValueUnit {
     Other = -1,
     Unknown = 0,
@@ -588,10 +525,7 @@ impl TraceValueUnit {
 /// Found in bytes 211-212 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum TransductionUnits {
     Other = -1,
     Unknown = 0,
@@ -617,10 +551,7 @@ impl TransductionUnits {
 /// Found in bytes 217-218 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum SourceType {
     Unknown = 0,
     VibratoryVertical = 1,
@@ -645,10 +576,7 @@ impl SourceType {
 /// Found in bytes 231-232 of the standard trace header.
 #[derive(Debug, Clone, Copy, PartialEq, FromPrimitive, ToPrimitive)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum SourceMeasurementUnit {
     Other = -1,
     Unknown = 0,

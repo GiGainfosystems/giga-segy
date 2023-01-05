@@ -7,16 +7,13 @@ use crate::RsgError;
 use crate::SegySettings;
 
 use encoding8::ebcdic::to_ascii;
-#[cfg(any(feature = "to_json", feature = "serde"))]
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 /// This structure represents a parsed binary trace header for a single trace of a SEG-Y file..
 #[derive(Debug, Clone, PartialEq)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct TraceHeader {
     /// Bytes 1 - 4 (0..4) of the trace header.
     pub trace_sequence_on_line: i32,
@@ -210,10 +207,7 @@ pub struct TraceHeader {
 /// and rearranges then into 32 fields for convenience.
 #[derive(Debug, Clone, PartialEq)]
 #[repr(C)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct BinHeader {
     /// Bytes 3201 - 3204 of the SEG-Y file, (0..4) of the binary header.
     pub job_id: u32,
@@ -321,10 +315,7 @@ pub struct TapeLabel {
 /// This is a rust readable version of the [`TapeLabel`] structure, which can be generated after the file
 /// has been read, but is not stored.
 #[derive(Debug, Clone, PartialEq)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct ReadableTapeLabel {
     pub storage_unit_seq_no: String,
     pub segy_revision_no: String,

@@ -10,14 +10,11 @@ use crate::{
     CDPX_BYTE_LOCATION, CDPY_BYTE_LOCATION, CROSSLINE_BYTE_LOCATION, INLINE_BYTE_LOCATION,
     TRACE_HEADER_LEN,
 };
-#[cfg(any(feature = "to_json", feature = "serde"))]
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq)]
-#[cfg_attr(
-    any(feature = "to_json", feature = "serde"),
-    derive(Serialize, Deserialize)
-)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 /// This structure holds a list of various settings to be imported for the custom reading of
 /// byte locations of various variables in the headers and other things when interpreting a SEG-Y file.
 ///

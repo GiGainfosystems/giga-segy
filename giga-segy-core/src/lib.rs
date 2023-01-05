@@ -6,7 +6,7 @@ extern crate num;
 extern crate num_derive;
 extern crate ibmfloat;
 
-#[cfg(any(feature = "to_json", feature = "serde"))]
+#[cfg(feature = "serde")]
 extern crate serde;
 #[cfg(feature = "to_json")]
 extern crate serde_json;

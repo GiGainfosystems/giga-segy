@@ -1,9 +1,10 @@
 [package]
 name = "giga-segy-core"
-version = "0.2.3"
+version = "0.3.0"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 edition = "2018"
 links = ""
+license = "MIT OR Apache-2.0"
 
 [lib]
 name = "giga_segy_core"
@@ -18,9 +19,13 @@ num-traits = "0.2"
 serde = { version = "1.0.40", features = ["derive"], optional = true }
 serde_json = { version = "1", optional = true }
 
+[dev-dependencies]
+giga-segy-out = { path = "../giga-segy-out" }
+
 [build-dependencies.cbindgen]
 version = "0.24"
 
 [features]
 default = []
+serde = ["dep:serde"]
 to_json = ["serde", "serde_json"]

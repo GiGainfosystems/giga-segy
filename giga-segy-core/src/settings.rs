@@ -1,20 +1,27 @@
-//! This module contains the `SegySettings` structure which can be used to customise the SEG-Y
+//! This module contains the [`SegySettings`] structure which can be used to customise the SEG-Y
 //! parsing.
+//!
 //! NB: It should be noted that since few files are in keeping with the proper SEG-Y format, this
-//! is necessary. On the other hand, using this functionality can easily break things.
+//! is necessary. On the other hand, using this functionality can easily cause incorrect writing
+//! or parsing of SEG-Y files and should therefore be done with care.
 use crate::enums::{MeasurementSystem, OrderTraceBy, SampleFormatCode, TraceIdCode};
 use crate::errors::*;
 use crate::{
     CDPX_BYTE_LOCATION, CDPY_BYTE_LOCATION, CROSSLINE_BYTE_LOCATION, INLINE_BYTE_LOCATION,
     TRACE_HEADER_LEN,
 };
-#[cfg(feature = "to_json")]
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq)]
-#[cfg_attr(feature = "to_json", derive(Serialize, Deserialize))]
-/// This structure holds a list of various settings to be imported, for the custom reading of
-/// byte locations of various variables in the headers and other things when interpreting a SEGY file.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+/// This structure holds a list of various settings to be imported for the custom reading of
+/// byte locations of various variables in the headers and other things when interpreting a SEG-Y file.
+///
+/// This structure does not allow direct manipulation of fields as in several cases not all possible
+/// values for that field are valid (eg byte indices are [`usize`], but a trace header is only 240 bytes long),
+/// and in other cases the value of one field may influence the value of another field.
+/// Therefore using setter and getter functions is generally safer.
 pub struct SegySettings {
     /// An enum which determines what traces are ordered by.
     pub(crate) order_trace_by: OrderTraceBy,
@@ -105,7 +112,7 @@ impl SegySettings {
         self.order_trace_by = order;
     }
 
-    /// Sets the endiannss to LE if true and BE if false
+    /// Sets the endianness to LE if true and BE if false
     pub fn set_override_to_le(&mut self, le: bool) {
         self.override_to_le = Some(le);
     }
@@ -131,8 +138,29 @@ impl SegySettings {
         self.override_coordinate_units = Some(units);
     }
 
-    /// Sets the trace format to the input. NB: This may return an error if the format code is for
-    /// a format which is not four bytes long (because that would raise more questions than it answers).
+    /// Sets the trace format to the input.
+    ///
+    /// This function will return an error if the format code is for a format which is not four bytes long.
+    /// This convention is maintained because the fields of the trace header used to store coordinate
+    /// values are 4 bytes long and therefore it should not usually be possible for SEG-Y files that
+    /// even pretend to follow the standard to store coordinates in a 2, 3 or 8 byte format.
+    /// ```
+    /// # use giga_segy_core::settings::*;
+    /// # use giga_segy_core::enums::SampleFormatCode;
+    /// let mut settings = SegySettings::default();
+    /// assert!(settings.get_override_coordinate_format().is_none());
+    ///
+    /// settings
+    ///     .set_override_coordinate_format(SampleFormatCode::IbmFloat32)
+    ///     .unwrap();
+    /// assert_eq!(
+    ///     settings.get_override_coordinate_format(),
+    ///     Some(SampleFormatCode::IbmFloat32)
+    /// );
+    ///
+    /// let res = settings.set_override_coordinate_format(SampleFormatCode::UInt64);
+    /// assert!(res.is_err());
+    /// ```
     pub fn set_override_coordinate_format(
         &mut self,
         format: SampleFormatCode,
@@ -142,7 +170,7 @@ impl SegySettings {
             IbmFloat32 | Float32 | UInt32 | Int32 => self.override_coordinate_format = Some(format),
             _ => {
                 return Err(RsgError::BitConversionError {
-                    msg: format!("Coordinate format must be 32-byte. {:?} is not", format),
+                    msg: format!("Coordinate format must be 4-byte. {:?} is not", format),
                 })
             }
         }
@@ -150,6 +178,29 @@ impl SegySettings {
     }
 
     /// Sets the coordinate scaling as overridden by the value.
+    ///
+    /// Since scaling in the trace headers is stored essentially as an [`i16`] value,
+    /// if the value given overflows this data type the function will return an error.
+    ///
+    /// Furthermore, the value given must already be in the format used by SEG-Y (see the
+    /// [SEG-Y_r2.0 standard](<https://seg.org/Portals/0/SEG/News%20and%20Resources/Technical%20Standards/seg_y_rev2_0-mar2017.pdf>)
+    /// (January 2017), page 17 for more details).
+    /// ```
+    /// # use giga_segy_core::settings::*;
+    /// let mut settings = SegySettings::default();
+    /// assert!(settings.get_override_coordinate_scaling().is_none());
+    ///
+    /// settings
+    ///     .set_override_coordinate_scaling(-100.0f64)
+    ///     .unwrap();
+    /// assert_eq!(
+    ///     settings.get_override_coordinate_scaling(),
+    ///     Some(-100.)
+    /// );
+    ///
+    /// let res = settings.set_override_coordinate_scaling(i16::MAX as f64 + 1.0);
+    /// assert!(res.is_err());
+    /// ```
     pub fn set_override_coordinate_scaling(&mut self, scaling: f64) -> Result<(), RsgError> {
         use num::FromPrimitive;
 
@@ -161,6 +212,21 @@ impl SegySettings {
     }
 
     /// Sets the inline number byte index as overridden by the value.
+    ///
+    /// If the byte index given would lead to reading past the end of the trace header an error is returned.
+    /// ```
+    /// # use giga_segy_core::settings::*;
+    /// let mut settings = SegySettings::default();
+    /// // NB: Rust uses zero indexing, the SEG-Y standard does not.
+    /// assert_eq!(settings.get_inline_no_bidx(), 188);
+    ///
+    /// // Trace header length is 240, so the last valid range is 236..239.
+    /// settings.set_inline_no_bidx(236).unwrap();
+    /// assert_eq!(settings.get_inline_no_bidx(), 236);
+    ///
+    /// let res = settings.set_inline_no_bidx(237);
+    /// assert!(res.is_err());
+    /// ```
     pub fn set_inline_no_bidx(&mut self, bidx: usize) -> Result<(), RsgError> {
         if bidx > TRACE_HEADER_LEN - 4 {
             return Err(RsgError::SEGYSettingsError {
@@ -225,6 +291,26 @@ impl SegySettings {
     }
 
     /// Sets the override for inline count.
+    ///
+    /// While this function takes an [`i32`] value as an argument, it will throw an error if the
+    /// value is negative. Furthermore, both [`Self::set_override_dim_x`] and [`Self::set_override_dim_y`]
+    /// also set `crossline_min_max` and `inline_min_max` respectively. Since the minimum
+    /// is set to zero in this case, it is strongly recommended that the user check and override this value
+    /// manually with [`Self::set_inlne_min_max`] or [`Self::set_crossline_min_max`] as appropriate.
+    /// ```
+    /// # use giga_segy_core::settings::*;
+    /// let mut settings = SegySettings::default();
+    /// // NB: Rust uses zero indexing, the SEG-Y standard does not.
+    /// assert!(settings.get_override_dim_x().is_none());
+    /// assert!(settings.get_crossline_min_max().is_none());
+    /// assert!(settings.set_override_dim_x(-1).is_err());
+    ///
+    /// settings.set_override_dim_x(50).unwrap();
+    /// assert_eq!(settings.get_override_dim_x(), Some(50));
+    /// // This could be troublesome, so it should be overridden manually
+    /// // once the actual min-max is known.
+    /// assert_eq!(settings.get_crossline_min_max(), Some([0, 49]));
+    /// ```
     pub fn set_override_dim_x(&mut self, dim_x: i32) -> Result<(), RsgError> {
         if dim_x < 0 {
             Err(RsgError::SEGYSettingsError {
@@ -239,7 +325,22 @@ impl SegySettings {
         }
     }
 
-    /// Sets the override for crossline count.
+    /// Sets the override for crossline count. As with [`Self::set_override_dim_x`], this function
+    /// should be used with care.
+    /// ```
+    /// # use giga_segy_core::settings::*;
+    /// let mut settings = SegySettings::default();
+    /// // NB: Rust uses zero indexing, the SEG-Y standard does not.
+    /// assert!(settings.get_override_dim_y().is_none());
+    /// assert!(settings.get_inlne_min_max().is_none());
+    /// assert!(settings.set_override_dim_y(-1).is_err());
+    ///
+    /// settings.set_override_dim_y(50).unwrap();
+    /// assert_eq!(settings.get_override_dim_y(), Some(50));
+    /// // This could be troublesome, so it should be overridden manually
+    /// // once the actual min-max is known.
+    /// assert_eq!(settings.get_inlne_min_max(), Some([0, 49]));
+    /// ```
     pub fn set_override_dim_y(&mut self, dim_y: i32) -> Result<(), RsgError> {
         if dim_y < 0 {
             Err(RsgError::SEGYSettingsError {
@@ -266,17 +367,17 @@ impl SegySettings {
         }
     }
 
-    /// Get the physical `u` vector.
+    /// Set the physical `u` vector to something other than what is found in headers.
     pub fn set_override_u(&mut self, u: [f64; 3]) {
         self.override_u = Some(u)
     }
 
-    /// Get the physical `v` vector.
+    /// Set the physical `v` vector to something other than what is found in headers.
     pub fn set_override_v(&mut self, v: [f64; 3]) {
         self.override_v = Some(v);
     }
 
-    /// Get the physcial sample interval (NB: one dimensionsal by definition.)
+    /// Set an override for the physical sample interval (NB: one dimensionsal by definition.)
     pub fn set_override_sample_interval(&mut self, t: f64) {
         self.override_sample_interval = Some(t);
     }
@@ -407,6 +508,22 @@ impl SegySettings {
         self.order_trace_by
     }
 
+    /// Check whether a given inline and crossline number will be in bounds
+    /// according to the options. If no inline/crossline min-max is set, the
+    /// return is [`true`].
+    /// ```
+    /// # use giga_segy_core::settings::SegySettings;
+    /// let mut settings = SegySettings::default();
+    /// assert!(settings.trace_in_bounds(99999, -99999));
+    ///
+    /// settings.set_inlne_min_max([50, 2000]);
+    /// assert_ne!(settings.trace_in_bounds(99999, -99999), true);
+    /// assert!(settings.trace_in_bounds(100, -99999));
+    ///
+    /// settings.set_crossline_min_max([50, 2000]);
+    /// assert_ne!(settings.trace_in_bounds(100, -99999), true);
+    /// assert!(settings.trace_in_bounds(100, 100));
+    /// ```
     pub fn trace_in_bounds(&self, inline: i32, crossline: i32) -> bool {
         let inline_ok = if let Some([min, max]) = self.inline_min_max {
             inline <= max && inline >= min

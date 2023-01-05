@@ -1,10 +1,12 @@
-//! This library is the foundation for the `rsg-in` and `rsg-out` crates.
+//! This library is the foundation for the `giga-segy-in` and `giga-segy-out` crates. It can be built either
+//! with serialization support, or in a slightly more lightweight manner without it (see features).
+#![allow(clippy::derive_partial_eq_without_eq)]
 extern crate num;
 #[macro_use]
 extern crate num_derive;
 extern crate ibmfloat;
 
-#[cfg(feature = "to_json")]
+#[cfg(feature = "serde")]
 extern crate serde;
 #[cfg(feature = "to_json")]
 extern crate serde_json;
@@ -32,8 +34,10 @@ pub const CROSSLINE_BYTE_LOCATION: usize = 192;
 pub const CDPX_BYTE_LOCATION: usize = 180;
 pub const CDPY_BYTE_LOCATION: usize = 184;
 
-/// This structure represents a SEG-Y trace. The Header is parsed and stored, the rest is stored
-/// as a set of indices for reading the memory map.
+/// This structure represents a SEG-Y trace.
+///
+/// The Header is parsed and stored in the structure, the data is stored
+/// in a memory map and referenced here as start and end indices.
 #[derive(Debug, Clone)]
 #[repr(C)]
 pub struct Trace {
@@ -45,8 +49,11 @@ pub struct Trace {
     pub(crate) trace_byte_len: usize,
 }
 
-/// This structure contains all of the metadata for opening a segy file.
-/// different implementations of SegyMetadata can then be used.
+/// This structure contains all of the metadata for opening a SEG-Y file.
+///
+/// Different implementations of [`SegyMetadata`] can then be made, depending on what type `S` is
+/// used for the settings. In general [`SegyMetadata`] is used internally by `giga_segy_input`
+/// and `giga_segy_output`, but may also prove suitable for uses elsewhere.
 pub struct SegyMetadata<S> {
     pub tape_label: Option<TapeLabel>,
     pub text_header: String,
@@ -56,7 +63,28 @@ pub struct SegyMetadata<S> {
 }
 
 impl Trace {
-    /// Create a new trace from data diectly extracted from the SEG-Y file.
+    /// Construct a new "trace" from a [`TraceHeader`] and byte locations in the file or slice
+    /// where the trace data is kept. Thus this function can be used both for input and output
+    /// purposes.
+    /// ```
+    /// use giga_segy_core::{Trace, TraceHeader};
+    /// use giga_segy_out::create_headers::CreateTraceHeader;
+    /// use std::io::Write;
+    ///
+    /// let mut fake_file = vec![];
+    ///
+    /// let data_start = 40_000;
+    /// let data = (0..100i32).flat_map(|x| x.to_be_bytes()).collect::<Vec<_>>();
+    ///
+    /// // Pretend to write data to a file, f, here.
+    /// let written = fake_file.write(&data).unwrap();
+    ///
+    /// let th = TraceHeader::default();
+    /// let tr = Trace::new(th, data_start, written);
+    /// assert_eq!(tr.get_start(), 40_000);
+    /// // NB: Length ignores the length of headers.
+    /// assert_eq!(tr.len(), 100 * 4);
+    /// ```
     pub fn new(trace_header: TraceHeader, data_start: usize, data_len: usize) -> Self {
         Trace {
             trace_header,
@@ -103,7 +131,7 @@ impl<S> SegyMetadata<S> {
         }
     }
 
-    /// Get the SEGY Settings.
+    /// Get the SEG-Y Settings.
     pub fn get_settings(&self) -> &S {
         &self.settings
     }
@@ -128,8 +156,8 @@ impl<S> SegyMetadata<S> {
         &self.extended_headers
     }
 
-    /// Get the text header as collection of short substrings.
-    /// NB: This is a horrifically wasteful waste of a function.
+    /// Get the text header as collection of short substrings. This function
+    /// clones the content of the text header.
     pub fn get_text_header_lines(&self) -> Vec<String> {
         self.text_header
             .chars()
@@ -150,7 +178,7 @@ impl<S> SegyMetadata<S> {
         self.tape_label.as_ref().map(|l| l.to_readable())
     }
 
-    /// This function gets all the fields of SegyMetadata and discards the instance. Used to get all
+    /// This function gets all the fields of [`SegyMetadata`] and discards the instance. Used to get all
     /// data in an efficient manner.
     /// NB: The internal mapping is discarded in the process.
     pub fn deconstruct(self) -> (Option<TapeLabel>, String, Vec<String>, BinHeader, S) {

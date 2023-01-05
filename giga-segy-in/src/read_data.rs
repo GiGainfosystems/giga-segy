@@ -73,7 +73,7 @@ pub(crate) fn get_trace_data_as_bytes_unprocessed(
     }
 }
 
-/// This function takes the SEGY memory map and the processed metadata and returns a vector of
+/// This function takes the SEG-Y memory map and the processed metadata and returns a vector of
 /// f32 result data.
 pub(crate) fn get_trace_data_as_f32(
     segy: &MappedSegY,
@@ -143,7 +143,7 @@ pub(crate) fn get_trace_data_point_as_bytes_unprocessed(
     Ok(data)
 }
 
-/// This function takes the SEGY memory map and the processed metadata and returns a vector of
+/// This function takes the SEG-Y memory map and the processed metadata and returns a vector of
 /// f32 result data.
 pub(crate) fn get_trace_data_point_as_f32(
     segy: &MappedSegY,

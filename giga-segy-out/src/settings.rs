@@ -1,5 +1,5 @@
 // Copyright (C) 2022 by GiGa infosystems
-//! This contains the specific settings for writing the SEGY file.
+//! This contains the specific settings for writing the SEG-Y file.
 use giga_segy_core::enums::*;
 use giga_segy_core::errors::*;
 use giga_segy_core::SegySettings;

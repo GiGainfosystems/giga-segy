@@ -12,7 +12,7 @@ pub enum RsgError {
     /// A wrapped memory map error.
     /// Binary header length problems.
     BinHeaderLength { l: usize },
-    /// An error in the settings of a SEGY.
+    /// An error in the settings of a SEG-Y.
     SEGYSettingsError { msg: String },
     /// File is too short (even shorter.)
     FileTooShort,
@@ -21,17 +21,17 @@ pub enum RsgError {
         float: f32,
         format: SampleFormatCode,
     },
-    /// SEGY is too short for a different reason..
+    /// SEG-Y is too short for a different reason..
     IncompleteTrace,
     /// Trace not found.
     TraceNotFound { i: usize },
     /// Trace point out of bounds.
     TracePointOutOfBounds { idx: usize },
-    /// SEGY is too short.
+    /// SEG-Y is too short.
     SEGYTooShort,
-    /// Your SEGY is too short.
+    /// Your SEG-Y is too short.
     ShortSEGY { a: usize, b: usize },
-    /// Your SEGY does not fit (divisibility).
+    /// Your SEG-Y does not fit (divisibility).
     TraceDivisibility {
         a: usize,
         b: usize,
@@ -55,8 +55,8 @@ pub enum RsgError {
     ParseEnum { f: String, code: u16 },
     /// Map file error (this is just a `std::io` error when mapping files).
     MapFile(std::io::Error),
-    /// Map file error.
     #[cfg(feature = "to_json")]
+    /// Serialisation/Deserialisation error.
     SerdeError(serde_json::Error),
 }
 
@@ -88,8 +88,8 @@ impl std::fmt::Display for RsgError {
             IncompleteTrace => write!(fmt, "Last trace incomplete: File may be corrupt."),
             TraceNotFound { i } => write!(fmt, "Trace  no. {} not found.", i),
             TracePointOutOfBounds { idx } => write!(fmt, "Error getting trace: Idx ({}) trace point is out of bounds.", idx),
-            SEGYTooShort => write!(fmt, "Mapped file is too short to be a SEGY file, or too many Extended Text Headers are counted"),
-            ShortSEGY { a, b } => write!(fmt, "Error getting trace: SEGY Mapping is too short (is {}-bytes, needs to be {}-bytes)", a, b),
+            SEGYTooShort => write!(fmt, "Mapped file is too short to be a SEG-Y file, or too many Extended Text Headers are counted"),
+            ShortSEGY { a, b } => write!(fmt, "Error getting trace: SEG-Y Mapping is too short (is {}-bytes, needs to be {}-bytes)", a, b),
             TraceDivisibility { a, b, format } => write!(fmt, "Error getting trace: data binary length ({}) not divisible by datum length ({}-bit ({}))", a, b, format),
             TraceHeaderLength { l } => write!(fmt, "Trace header length should be 240 but is {}", l),
             BitConversionError { msg } => write!(fmt, "Bit conversion failed: {}", msg),

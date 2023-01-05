@@ -12,10 +12,46 @@ use tinyvec::TinyVec;
 /// This exists to save us a lot of typing.
 pub(crate) type TVu8 = TinyVec<[u8; 8]>;
 
+/// This trait allows a new data type to be added for lossless writing and may be useful
+/// for those who extensively use exotic data types and need to have checks in place.
+/// ```
+/// # use giga_segy_out::write_data::LosslessWriteableSegyData;
+/// # use giga_segy_core::enums::SampleFormatCode;
+/// # use num::ToPrimitive;
+///
+/// #[derive(Debug)]
+/// /// This is my super exotic magical data type.
+/// pub struct MagicalWrappedF64(f64);
+///
+/// impl ToPrimitive for MagicalWrappedF64 {
+///     fn to_i64(&self) -> Option<i64> { self.0.to_i64() }
+///     fn to_u64(&self) -> Option<u64> { self.0.to_u64() }
+///     fn to_f64(&self) -> Option<f64> { Some(self.0) }
+/// }
+///
+/// impl LosslessWriteableSegyData for MagicalWrappedF64 {
+///     fn is_lossless_to(f: SampleFormatCode) -> bool {
+///         matches!(f, SampleFormatCode::Float64)
+///     }
+/// }
+/// ```
 pub trait LosslessWriteableSegyData: ToPrimitive + Debug {
     /// This function exists to check whether the given type is compatible with lossless
-    /// conversion with a given format. It is used as a validation check in `SegyFile::add_trace_lossless`,
-    /// but it is encouraged to use it as a sanity check when writing the SEGY writer.
+    /// conversion with a given format. It is used as a validation check in [`crate::SegyFile::add_trace_lossless`],
+    /// but it is encouraged to use it as a sanity check when writing the SEG-Y writer.
+    /// ```
+    /// # use giga_segy_out::write_data::LosslessWriteableSegyData;
+    /// # use giga_segy_core::enums::SampleFormatCode;
+    ///
+    /// assert!(f64::is_lossless_to(SampleFormatCode::Float64));
+    /// assert_eq!(f64::is_lossless_to(SampleFormatCode::Float32), false);
+    /// assert!(f32::is_lossless_to(SampleFormatCode::Float32));
+    /// assert_eq!(f64::is_lossless_to(SampleFormatCode::Int64), false);
+    /// assert_eq!(f64::is_lossless_to(SampleFormatCode::UInt64), false);
+    /// assert!(i64::is_lossless_to(SampleFormatCode::Int64));
+    /// assert!(u64::is_lossless_to(SampleFormatCode::UInt64));
+    /// // etc.
+    /// ```
     fn is_lossless_to(f: SampleFormatCode) -> bool;
 }
 

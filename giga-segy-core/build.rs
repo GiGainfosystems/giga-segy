@@ -1,6 +1,5 @@
-extern crate cbindgen;
-
 fn main() {
+    #[cfg(feature = "gen_cbindings")]
     {
         use std::env;
         let root = env::var("CARGO_MANIFEST_DIR").unwrap();

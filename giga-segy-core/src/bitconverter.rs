@@ -59,13 +59,13 @@ pub fn converter_chooser(format: SampleFormatCode, le: bool) -> Result<BitConver
         }
         SampleFormatCode::Float32 if le => {
             fn x(input: &[u8]) -> Result<f32, TryFromSliceError> {
-                Ok(f32::from_le_bytes(input.try_into()?) as f32)
+                Ok(f32::from_le_bytes(input.try_into()?))
             }
             x
         }
         SampleFormatCode::Float32 => {
             fn x(input: &[u8]) -> Result<f32, TryFromSliceError> {
-                Ok(f32::from_be_bytes(input.try_into()?) as f32)
+                Ok(f32::from_be_bytes(input.try_into()?))
             }
             x
         }

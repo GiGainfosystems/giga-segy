@@ -89,7 +89,6 @@ impl MappedSegY {
             return Err(RsgError::SEGYTooShort);
         }
 
-        let count = count as usize;
         let mut extra_headers = Vec::with_capacity(count);
         for i in 0..count {
             let start = start_byte + i * TEXT_HEADER_LEN;

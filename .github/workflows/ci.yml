@@ -1,0 +1,83 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - master
+
+name: CI Tests
+
+# See: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency.
+# This will ensure that only one commit will be running tests at a time on each PR.
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Rustfmt check
+        run: cargo +stable fmt --all -- --check
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Set environment variables
+        shell: bash
+        run: |
+          echo "RUSTFLAGS=-D warnings" >> $GITHUB_ENV
+      - name: Clippy
+        run: cargo +stable clippy --all-features
+  tests:
+    needs:
+      - rustfmt
+      - clippy
+    name: Check
+    strategy:
+      fail-fast: false
+      matrix:
+        rust: ["stable", "beta", "nightly"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-${{ matrix.backend }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+
+      - name: Install rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust }}
+      - name: Set environment variables
+        if: matrix.rust != 'nightly'
+        shell: bash
+        run: |
+          echo "RUSTFLAGS=-D warnings" >> $GITHUB_ENV
+
+      - name: Core tests
+        run: cargo +${{ matrix.rust }} test --all-targets --manifest-path "giga-segy-core/Cargo.toml"
+
+      - name: In tests
+        run: cargo +${{ matrix.rust }} test --all-targets --manifest-path "giga-segy-in/Cargo.toml"
+
+      - name: Out tests
+        run: cargo +${{ matrix.rust }} test --all-targets --manifest-path "giga-segy-out/Cargo.toml"
+
+      - name: Rustdoc
+        run: cargo +${{ matrix.rust }} doc --all-features

@@ -7,14 +7,14 @@ edition = "2018"
 keywords = ["geo", "SEG-Y", "SEGY", "seismic", "writer"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/GiGainfosystems/giga-segy"
-version = "0.3.0"
+version = "0.3.1"
 
 [lib]
 name = "giga_segy_out"
 crate-type = ["staticlib","rlib"]
 
 [dependencies]
-giga-segy-core = { version = "0.3.0", path = "../giga-segy-core" }
+giga-segy-core = { version = "0.3.1", path = "../giga-segy-core" }
 
 fnv = "1"
 num = "0.4"
@@ -22,5 +22,5 @@ tinyvec = { version = "1.5", features = ["alloc"] }
 
 
 [dev-dependencies]
-giga-segy-in = { version = "0.3.0", path = "../giga-segy-in" }
+giga-segy-in = { version = "0.3.1", path = "../giga-segy-in" }
 tempfile = "3.3"

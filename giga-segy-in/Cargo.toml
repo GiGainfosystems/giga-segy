@@ -7,14 +7,14 @@ edition = "2018"
 keywords = ["geo", "SEG-Y", "SEGY", "seismic", "parser"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/GiGainfosystems/giga-segy"
-version = "0.3.0"
+version = "0.3.1"
 
 [lib]
 name = "giga_segy_in"
 crate-type = ["staticlib","rlib"]
 
 [dependencies]
-giga-segy-core = { version = "0.3.0", path = "../giga-segy-core" }
+giga-segy-core = { version = "0.3.1", path = "../giga-segy-core" }
 
 encoding8 = "0.3"
 memmap2 = "0.5"

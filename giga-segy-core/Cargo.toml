@@ -8,7 +8,7 @@ keywords = ["geo", "SEG-Y", "SEGY", "seismic"]
 license = "MIT OR Apache-2.0"
 links = ""
 repository = "https://github.com/GiGainfosystems/giga-segy"
-version = "0.3.0"
+version = "0.3.1"
 
 [lib]
 name = "giga_segy_core"
@@ -24,7 +24,7 @@ serde = { version = "1.0.40", features = ["derive"], optional = true }
 serde_json = { version = "1", optional = true }
 
 [dev-dependencies]
-giga-segy-out = { path = "../giga-segy-out" }
+giga-segy-out = { path = "../giga-segy-out", version = "0.3.1" }
 
 [build-dependencies.cbindgen]
 version = "0.24"

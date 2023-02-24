@@ -40,6 +40,7 @@ pub const CDPY_BYTE_LOCATION: usize = 184;
 /// in a memory map and referenced here as start and end indices.
 #[derive(Debug, Clone)]
 #[repr(C)]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 pub struct Trace {
     /// A parsed trace header which contains the trace metadata.
     pub(crate) trace_header: TraceHeader,

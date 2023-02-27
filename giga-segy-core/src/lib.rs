@@ -38,7 +38,7 @@ pub const CDPY_BYTE_LOCATION: usize = 184;
 ///
 /// The Header is parsed and stored in the structure, the data is stored
 /// in a memory map and referenced here as start and end indices.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 pub struct Trace {

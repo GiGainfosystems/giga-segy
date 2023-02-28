@@ -284,6 +284,7 @@ pub struct BinHeader {
 /// It appears that this is stored mostly as character bytes (u8).
 #[derive(Debug, Clone, PartialEq)]
 #[repr(C)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct TapeLabel {
     /// Bytes 1-4 (0..4)
     pub storage_unit_seq_no: [u8; 4],

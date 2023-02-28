@@ -14,7 +14,7 @@ use crate::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 /// This structure holds a list of various settings to be imported for the custom reading of
 /// byte locations of various variables in the headers and other things when interpreting a SEG-Y file.
 ///

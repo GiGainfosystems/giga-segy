@@ -13,11 +13,13 @@ version = "0.3.2"
 name = "giga_segy_in"
 crate-type = ["staticlib","rlib"]
 
-[dependencies]
-giga-segy-core = { version = "0.3.1", path = "../giga-segy-core" }
+[dependencies.giga-segy-core]
+path = "../giga-segy-core"
+version = "0.3.3"
 
+[dependencies]
 encoding8 = "0.3"
-memmap2 = "0.5"
+memmap2 = "0.8"
 num = "0.4"
 
 [features]

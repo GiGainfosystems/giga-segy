@@ -17,7 +17,7 @@ giga-segy-core = { version = "0.3.1", features = ["gen_cbindings"]}
 ```
 
 Here is an example of a super simple SEG-Y parser that uses `giga-segy`.
-```Rust
+```rust
 use std::path::PathBuf;
 use giga_segy_in::SegyFile;
 

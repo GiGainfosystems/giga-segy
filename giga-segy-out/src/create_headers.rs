@@ -133,7 +133,7 @@ fn create_default_bin_header() -> BinHeader {
         measurement_system: MeasurementSystem::Unspecified,
         impulse_signal_polarity: ImpulseSignalPolarity::Unspecified,
         vibratory_polarity_code: VibratoryPolarityCode::Unspecified,
-        /// Combines minor and major revision code.
+        // Combines minor and major revision code.
         segy_revision_number: [2, 0],
         fixed_length_trace_flag: FixedLengthTraces::No,
         extended_header_count: 0,

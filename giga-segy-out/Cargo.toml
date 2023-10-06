@@ -1,13 +1,14 @@
 [package]
 name = "giga-segy-out"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
+categories = ["science::geo"]
 description = "A library allows writing of SEG-Y."
 documentation = "https://docs.rs/giga_segy_out"
 edition = "2018"
 keywords = ["geo", "SEG-Y", "SEGY", "seismic", "writer"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/GiGainfosystems/giga-segy"
-version = "0.3.3"
+version = "0.4.0"
 
 [lib]
 name = "giga_segy_out"
@@ -15,7 +16,7 @@ crate-type = ["staticlib","rlib"]
 
 [dependencies.giga-segy-core]
 path = "../giga-segy-core"
-version = "0.3.3"
+version = "0.4"
 
 [dependencies]
 fnv = "1"
@@ -27,4 +28,4 @@ tempfile = "3.3"
 
 [dev-dependencies.giga-segy-in]
 path = "../giga-segy-in"
-version = "0.3"
+version = "0.4"

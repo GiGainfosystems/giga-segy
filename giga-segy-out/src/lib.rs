@@ -136,7 +136,6 @@ impl<S: SegyWriteSettings> SegyFile<S> {
         Ok(SegyFile {
             metadata: SegyMetadata::new(tape_label, text_header, vec![], bin_header, settings),
             traces: Vec::new(),
-            /// This is here to speed up the lookup of traces. NB: ([xline,inline],index)
             lookup: fnv::FnvHashMap::default(),
             file,
         })

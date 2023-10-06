@@ -1,6 +1,7 @@
 [package]
 name = "giga-segy-core"
 authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
+categories = ["science::geo"]
 description = "A library containing basic structures for working with SEG-Y."
 documentation = "https://docs.rs/giga_segy_core"
 edition = "2018"
@@ -8,7 +9,8 @@ keywords = ["geo", "SEG-Y", "SEGY", "seismic"]
 license = "MIT OR Apache-2.0"
 links = ""
 repository = "https://github.com/GiGainfosystems/giga-segy"
-version = "0.3.2"
+rust-version = "1.64.0"
+version = "0.4.0"
 
 [lib]
 name = "giga_segy_core"
@@ -18,16 +20,17 @@ crate-type = ["staticlib","rlib"]
 encoding8 = "0.3"
 ibmfloat = "0.1"
 num = "0.4"
-num-derive = "0.3"
+num-derive = "0.4"
 num-traits = "0.2"
-serde = { version = "1.0.40", features = ["derive"], optional = true }
+serde = { version = "^1.0.103", features = ["derive"], optional = true }
 serde_json = { version = "1", optional = true }
 
-[dev-dependencies]
-giga-segy-out = { path = "../giga-segy-out", version = "0.3.1" }
+[dev-dependencies.giga-segy-out]
+path = "../giga-segy-out"
+version = "0.4"
 
 [build-dependencies.cbindgen]
-version = "0.24"
+version = "0.26"
 optional = true
 
 [features]

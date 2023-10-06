@@ -19,7 +19,7 @@ giga-segy-core = { version = "0.3.1", features = ["gen_cbindings"]}
 ```
 
 Here is an example of a super simple SEG-Y parser that uses `giga-segy`.
-```Rust
+```rust
 use giga_segy_out::SegyFile;
 use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
 use giga_segy_core::enums::*;

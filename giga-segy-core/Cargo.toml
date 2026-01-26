@@ -9,7 +9,7 @@ license = "MIT OR Apache-2.0"
 links = ""
 repository = "https://github.com/GiGainfosystems/giga-segy"
 version = "0.5.0"
-include = ["src/**/*.rs", "README.md", "LICENSE_*.txt", "Cargo.toml"]
+include = ["src/**/*.rs", "README.md", "LICENSE_*.txt", "Cargo.toml", "build.rs"]
 
 [lib]
 name = "giga_segy_core"

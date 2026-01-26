@@ -478,7 +478,7 @@ impl SegySettings {
     pub fn get_max_trace_count_by_override_dimensions(&self) -> usize {
         match (self.override_dim_x, self.override_dim_y) {
             (Some(x), Some(y)) => x as usize * y as usize,
-            _ => std::usize::MAX,
+            _ => usize::MAX,
         }
     }
 

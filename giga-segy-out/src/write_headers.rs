@@ -19,7 +19,7 @@ pub trait SegyHeaderToBytes {
 impl SegyHeaderToBytes for TapeLabel {
     fn as_bytes(&self) -> Result<Vec<u8>, RsgError> {
         let mbs_string = self.max_block_size.to_string();
-        let ml = 10 - mbs_string.as_bytes().len() as i64;
+        let ml = 10 - mbs_string.len() as i64;
 
         if ml < 0 {
             let msg = format!("Invalid TapeLabel: max block size too long: {}", 10 - ml);
@@ -150,12 +150,12 @@ impl SegyHeaderToBytes for BinHeader {
 /// Convert the trace header to bytes.
 ///
 /// * We cannot use [`crate::write_headers::SegyHeaderToBytes`] as we also need values
-/// from the binary header.
+///   from the binary header.
 ///
 /// * Because of how variable byte positions work, it is possible to use settings to assign
-/// overlapping byte positions or overwrite other fields in the trace header when overriding
-/// byte indices using the settings (if the given settings `S` support overriding byte indices).
-/// Care is therefore advised.
+///   overlapping byte positions or overwrite other fields in the trace header when overriding
+///   byte indices using the settings (if the given settings `S` support overriding byte indices).
+///   Care is therefore advised.
 pub fn th_as_bytes_with_settings<S: SegyWriteSettings>(
     trace_header: &TraceHeader,
     settings: &S,

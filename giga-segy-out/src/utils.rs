@@ -22,10 +22,10 @@ use std::ops::Div;
 /// There are two points of note for this function:
 ///
 /// * The multiplier should be of the same type as the coordinates
-/// that are being converted.
+///   that are being converted.
 ///
 /// * SEG-Y stores scalars as [`i16`], so initial multipliers of a high
-/// magnitude, or those from non-integer floats will be handled lossily.
+///   magnitude, or those from non-integer floats will be handled lossily.
 ///
 /// ```
 /// # use giga_segy_out::utils::CoordinateScalar;

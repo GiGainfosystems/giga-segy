@@ -148,7 +148,7 @@ impl<S> SegyMetadata<S> {
     }
 
     /// Get the extended headers.
-    pub fn extended_headers_iter(&self) -> std::slice::Iter<String> {
+    pub fn extended_headers_iter(&self) -> std::slice::Iter<'_, String> {
         self.extended_headers.iter()
     }
 

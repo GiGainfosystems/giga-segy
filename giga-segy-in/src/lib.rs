@@ -209,7 +209,7 @@ impl SegyFile {
     }
 
     /// Get an iterator over the extended headers.
-    pub fn extended_headers_iter(&self) -> std::slice::Iter<String> {
+    pub fn extended_headers_iter(&self) -> std::slice::Iter<'_, String> {
         self.metadata.extended_headers_iter()
     }
 
@@ -406,7 +406,7 @@ impl SegyFile {
     }
 
     /// Iterate through the traces.
-    pub fn traces_iter(&self) -> std::slice::Iter<Trace> {
+    pub fn traces_iter(&self) -> std::slice::Iter<'_, Trace> {
         self.traces.iter()
     }
 

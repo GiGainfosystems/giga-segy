@@ -12,13 +12,12 @@
 #![allow(clippy::derive_partial_eq_without_eq)]
 extern crate fnv;
 extern crate giga_segy_core;
-extern crate num;
-#[macro_use]
-extern crate tinyvec;
 #[cfg(test)]
 extern crate giga_segy_in;
+extern crate num;
 #[cfg(test)]
 extern crate tempfile;
+extern crate tinyvec;
 
 pub mod create_headers;
 #[cfg(test)]

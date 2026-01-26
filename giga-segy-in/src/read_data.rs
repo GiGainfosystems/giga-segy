@@ -19,15 +19,15 @@ pub(crate) fn get_trace_data_reference<'a>(
     let start = trace.get_start();
 
     // Sanity check.
-    if segy.map.len() < len + start {
+    if segy.len() < len + start {
         return Err(RsgError::ShortSEGY {
-            a: segy.map.len(),
+            a: segy.len(),
             b: len + start,
         });
     }
 
     // Return the bytes as they are.
-    Ok(&segy.map[start..(start + len)])
+    Ok(&segy[start..(start + len)])
 }
 
 /// A function to get the bytes of sub-slice SEG-Y data trace.
@@ -38,7 +38,7 @@ pub(crate) fn get_trace_data_slice_reference(
     range: std::ops::Range<usize>,
 ) -> &[u8] {
     // Return the bytes as they are.
-    &segy.map[range]
+    &segy[range]
 }
 
 /// A function to get the bytes of a SEG-Y data trace.
@@ -135,7 +135,7 @@ pub(crate) fn get_trace_data_point_as_bytes_unprocessed(
     let first_byte = trace.get_start() + idx * datum_byte_length;
     let last_byte = first_byte + datum_byte_length;
 
-    if (last_byte > trace.get_start() + trace.len()) || (last_byte > segy.map.len()) {
+    if (last_byte > trace.get_start() + trace.len()) || (last_byte > segy.len()) {
         return Err(RsgError::TracePointOutOfBounds { idx });
     }
     let range = first_byte..last_byte;
@@ -164,7 +164,7 @@ pub(crate) fn get_trace_data_point_as_f32(
     let last_byte = first_byte + datum_byte_length;
 
     // san check.
-    if (last_byte > trace.get_start() + trace.len()) || (last_byte > segy.map.len()) {
+    if (last_byte > trace.get_start() + trace.len()) || (last_byte > segy.len()) {
         return Err(RsgError::TracePointOutOfBounds { idx });
     }
     // Build range.

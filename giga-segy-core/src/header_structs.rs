@@ -663,7 +663,7 @@ trace name: {}",
 }
 
 pub(crate) fn c_safe_name(name: &[u8]) -> String {
-    if name.iter().any(|c| *c == 0) {
+    if name.contains(&0) {
         "".to_owned()
     } else {
         String::from_utf8(name.to_vec()).unwrap_or_else(|_| "".to_owned())

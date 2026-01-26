@@ -19,7 +19,8 @@
 //! root.pop();
 //! let name = root.join("testdata").join("DutchMiniHead.sgy");
 //!
-//! let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+//! let file = std::fs::File::open(name).unwrap();
+//! let file = SegyFile::open(file, Default::default()).unwrap();
 //!
 //! let text_header: &str = file.get_text_header();
 //! // SEG-Y text headers should always have 3200 character.
@@ -55,13 +56,14 @@ pub mod read_data;
 #[cfg(test)]
 mod tests;
 
-use memory_map::MappedSegY;
 use std::collections::HashMap;
+use std::convert::TryInto;
 
 pub use giga_segy_core::enums;
 pub use giga_segy_core::errors::*;
 pub use giga_segy_core::header_structs::*;
 pub use giga_segy_core::{SegyMetadata, SegySettings, Trace};
+pub use memory_map::MappedSegY;
 
 use giga_segy_core::*;
 
@@ -101,11 +103,15 @@ impl SegyFile {
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default());
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default());
     /// assert!(file.is_ok());
     /// ```
-    pub fn open(file_name: &str, settings: SegySettings) -> Result<Self, RsgError> {
-        let data = MappedSegY::new(file_name)?;
+    pub fn open(
+        reader: impl TryInto<MappedSegY, Error = RsgError>,
+        settings: SegySettings,
+    ) -> Result<Self, RsgError> {
+        let data: MappedSegY = reader.try_into()?;
         let tape_label = data.get_tape_label(&settings)?;
         let text_header = data.get_text_header()?;
         let mut bin_header = data.get_bin_header(&settings)?;
@@ -150,7 +156,8 @@ impl SegyFile {
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
     ///
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default()).unwrap();
     ///
     /// let retrieved_settings = file.get_settings();
     /// assert_eq!(retrieved_settings, &Default::default());
@@ -170,7 +177,8 @@ impl SegyFile {
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
     ///
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default()).unwrap();
     ///
     /// let retrieved_settings = file.get_tape_label();
     /// assert_eq!(retrieved_settings, &None);
@@ -196,7 +204,8 @@ impl SegyFile {
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
     ///
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default()).unwrap();
     ///
     /// let text_header: &str = file.get_text_header();
     /// // SEG-Y text headers should always have 3200 character.
@@ -209,7 +218,7 @@ impl SegyFile {
     }
 
     /// Get an iterator over the extended headers.
-    pub fn extended_headers_iter(&self) -> std::slice::Iter<String> {
+    pub fn extended_headers_iter(&self) -> std::slice::Iter<'_, String> {
         self.metadata.extended_headers_iter()
     }
 
@@ -233,7 +242,8 @@ impl SegyFile {
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
     ///
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default()).unwrap();
     ///
     /// let text_headers = file.get_text_header_lines();
     /// // SEG-Y text headers should always have 40 lines.
@@ -287,7 +297,8 @@ impl SegyFile {
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
     ///
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default()).unwrap();
     ///
     /// let expected_sample_count = file.get_bin_header().no_samples as usize;
     /// let data_vec_4 = file.get_trace_data_as_f32(3).unwrap();
@@ -377,8 +388,8 @@ impl SegyFile {
     /// let mut root = var("CARGO_MANIFEST_DIR").map(PathBuf::from).unwrap();
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
-    ///
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default()).unwrap();
     ///
     /// let third_trace = file.get_trace(3).unwrap();
     /// let data_vec_4 = file.get_trace_data_as_f32(3).unwrap();
@@ -406,7 +417,7 @@ impl SegyFile {
     }
 
     /// Iterate through the traces.
-    pub fn traces_iter(&self) -> std::slice::Iter<Trace> {
+    pub fn traces_iter(&self) -> std::slice::Iter<'_, Trace> {
         self.traces.iter()
     }
 
@@ -421,7 +432,8 @@ impl SegyFile {
     /// root.pop();
     /// let name = root.join("testdata").join("DutchMiniHead.sgy");
     ///
-    /// let file = SegyFile::open(name.to_str().unwrap(), Default::default()).unwrap();
+    /// let file = std::fs::File::open(name).unwrap();
+    /// let file = SegyFile::open(file, Default::default()).unwrap();
     ///
     /// let minmax = file.get_trace_idx_for_crossline_min_max().unwrap();
     /// let min_trace = file.get_trace(minmax[0]).unwrap();

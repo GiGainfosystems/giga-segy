@@ -12,13 +12,12 @@
 #![allow(clippy::derive_partial_eq_without_eq)]
 extern crate fnv;
 extern crate giga_segy_core;
-extern crate num;
-#[macro_use]
-extern crate tinyvec;
 #[cfg(test)]
 extern crate giga_segy_in;
+extern crate num;
 #[cfg(test)]
 extern crate tempfile;
+extern crate tinyvec;
 
 pub mod create_headers;
 #[cfg(test)]
@@ -69,7 +68,7 @@ impl TraceCoordinates {
 }
 
 /// A structure which represents a mapped SEG-Y file. This represents a writeable SEG-Y.
-pub struct SegyFile<S: SegyWriteSettings> {
+pub struct SegyFile<S: SegyWriteSettings, W> {
     /// Metadata, including headers and settings used for creating and writing this file.
     pub metadata: SegyMetadata<S>,
     /// A record of traces written.
@@ -77,11 +76,11 @@ pub struct SegyFile<S: SegyWriteSettings> {
     /// This is here to speed up the lookup of traces.
     // I suspect that the lookup will not be useful.
     pub lookup: fnv::FnvHashMap<usize, TraceCoordinates>,
-    /// The file which the SEG-Y is being written to.
-    pub file: File,
+    /// The writer which the SEG-Y is being written to.
+    pub writer: W,
 }
 
-impl<S: SegyWriteSettings> SegyFile<S> {
+impl<S: SegyWriteSettings> SegyFile<S, File> {
     /// Create a file and return the handle to a writeable file. Traces can then be added
     /// one by one.
     /// ```
@@ -98,7 +97,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     /// // The number of samples in either the binary or trace header must equal data vector length.
     /// bin_header.no_samples = 50;
     ///
-    /// let mut file = SegyFile::<SegySettings>::create_file(
+    /// let mut file = SegyFile::<SegySettings, std::fs::File>::create_file(
     ///     path,
     ///     Default::default(),
     ///     std::iter::repeat('x').take(3200).collect::<String>(),
@@ -119,25 +118,64 @@ impl<S: SegyWriteSettings> SegyFile<S> {
         bin_header: BinHeader,
         tape_label: Option<TapeLabel>,
     ) -> Result<Self, RsgError> {
-        let mut file = OpenOptions::new()
+        let file = OpenOptions::new()
             .write(true)
             .read(true)
             .create_new(true)
             .open(file_name)?;
+        SegyFile::<S, File>::to_writer(file, settings, text_header, bin_header, tape_label)
+    }
+}
 
+impl<S: SegyWriteSettings, W: Write> SegyFile<S, W> {
+    /// Create a new SegyFile writer. Traces can then be added
+    /// one by one.
+    /// ```
+    /// use giga_segy_out::SegyFile;
+    /// use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
+    /// use giga_segy_core::enums::*;
+    /// use giga_segy_out::create_headers::{CreateBinHeader, CreateTraceHeader};
+    ///
+    /// let mut bin_header = BinHeader::default();
+    /// bin_header.sample_format_code = SampleFormatCode::Float32;
+    /// // The number of samples in either the binary or trace header must equal data vector length.
+    /// bin_header.no_samples = 50;
+    ///
+    /// let mut buffer = Vec::<u8>::new();
+    /// let mut file = SegyFile::<SegySettings, &mut Vec<u8>>::to_writer(
+    ///     &mut buffer,
+    ///     Default::default(),
+    ///     std::iter::repeat('x').take(3200).collect::<String>(),
+    ///     bin_header,
+    ///     None,
+    /// ).unwrap();
+    /// for i in 0..10 {
+    ///     let trace_header = TraceHeader::new_2d(1, 1, 0);
+    ///     // NB: `add_trace` can add data lossily (sample format is `f32`, data format is `f64`).
+    ///     let data = (i..(i+50)).map(|x| x as f64).collect::<Vec<f64>>();
+    ///     file.add_trace(trace_header, None, data).unwrap();
+    /// }
+    /// ```
+    pub fn to_writer(
+        mut writer: W,
+        settings: S,
+        text_header: String,
+        bin_header: BinHeader,
+        tape_label: Option<TapeLabel>,
+    ) -> Result<Self, RsgError> {
         if let Some(ref tl) = tape_label {
-            file.write_all(&tl.as_bytes()?)?;
+            writer.write_all(&tl.as_bytes()?)?;
         }
 
-        crate::write_headers::write_text_header(&text_header, &mut file)?;
+        crate::write_headers::write_text_header(&text_header, &mut writer)?;
 
-        file.write_all(&bin_header.as_bytes()?)?;
+        writer.write_all(&bin_header.as_bytes()?)?;
 
         Ok(SegyFile {
             metadata: SegyMetadata::new(tape_label, text_header, vec![], bin_header, settings),
             traces: Vec::new(),
             lookup: fnv::FnvHashMap::default(),
-            file,
+            writer,
         })
     }
 
@@ -184,7 +222,7 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     /// // The number of samples in either the binary or trace header must equal data vector length.
     /// bin_header.no_samples = 50;
     ///
-    /// let mut file = SegyFile::<SegySettings>::create_file(
+    /// let mut file = SegyFile::<SegySettings, std::fs::File>::create_file(
     ///     path,
     ///     Default::default(),
     ///     std::iter::repeat('x').take(3200).collect::<String>(),
@@ -232,8 +270,8 @@ impl<S: SegyWriteSettings> SegyFile<S> {
     }
 }
 
-fn write_trace_internal<T, S>(
-    segy: &mut SegyFile<S>,
+fn write_trace_internal<T, S, W>(
+    segy: &mut SegyFile<S, W>,
     trace_header: TraceHeader,
     extended_header: Option<String>,
     data: Vec<T>,
@@ -242,6 +280,7 @@ fn write_trace_internal<T, S>(
 where
     T: ToPrimitive + Debug,
     S: SegyWriteSettings,
+    W: Write,
 {
     // Get some parameters for construction of byte coordinates.
     let idx = segy.traces.len();
@@ -271,17 +310,17 @@ where
         bin_header,
     )?;
     let mut length = header_bytes.len();
-    segy.file.write_all(&header_bytes)?;
+    segy.writer.write_all(&header_bytes)?;
 
     if let Some(extra) = extended_header {
         let bytes = extra.as_bytes();
         length += bytes.len();
-        segy.file.write_all(bytes)?;
+        segy.writer.write_all(bytes)?;
     }
 
     let data = write_fn(data, bin_header)?;
     length += data_len;
-    segy.file.write_all(&data)?;
+    segy.writer.write_all(&data)?;
 
     let new_coordinates = TraceCoordinates::new(idx, new_start, data_len, length);
     segy.traces

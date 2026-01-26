@@ -4,9 +4,6 @@ use giga_segy_core::enums::*;
 use giga_segy_core::errors::*;
 use giga_segy_core::{BinHeader, TapeLabel, TraceHeader};
 use num::ToPrimitive;
-// use rust_segy_input::{BIN_HEADER_LEN, TRACE_HEADER_LEN};
-
-use std::fs::File;
 use std::io::Write;
 
 use crate::settings::SegyWriteSettings;
@@ -19,7 +16,7 @@ pub trait SegyHeaderToBytes {
 impl SegyHeaderToBytes for TapeLabel {
     fn as_bytes(&self) -> Result<Vec<u8>, RsgError> {
         let mbs_string = self.max_block_size.to_string();
-        let ml = 10 - mbs_string.as_bytes().len() as i64;
+        let ml = 10 - mbs_string.len() as i64;
 
         if ml < 0 {
             let msg = format!("Invalid TapeLabel: max block size too long: {}", 10 - ml);
@@ -48,7 +45,7 @@ impl SegyHeaderToBytes for TapeLabel {
 /// The standard text header is a string of length 3200 bytes.
 ///
 /// NB: It is more efficient to just write it than to allocate it as a string.
-pub(crate) fn write_text_header(header: &str, file: &mut File) -> Result<(), RsgError> {
+pub(crate) fn write_text_header(header: &str, file: &mut impl Write) -> Result<(), RsgError> {
     let raw_bytes = header.as_bytes();
     let bl = 3200 - raw_bytes.len() as i64;
 
@@ -150,12 +147,12 @@ impl SegyHeaderToBytes for BinHeader {
 /// Convert the trace header to bytes.
 ///
 /// * We cannot use [`crate::write_headers::SegyHeaderToBytes`] as we also need values
-/// from the binary header.
+///   from the binary header.
 ///
 /// * Because of how variable byte positions work, it is possible to use settings to assign
-/// overlapping byte positions or overwrite other fields in the trace header when overriding
-/// byte indices using the settings (if the given settings `S` support overriding byte indices).
-/// Care is therefore advised.
+///   overlapping byte positions or overwrite other fields in the trace header when overriding
+///   byte indices using the settings (if the given settings `S` support overriding byte indices).
+///   Care is therefore advised.
 pub fn th_as_bytes_with_settings<S: SegyWriteSettings>(
     trace_header: &TraceHeader,
     settings: &S,

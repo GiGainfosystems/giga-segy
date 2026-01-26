@@ -362,8 +362,9 @@ fn header_test_bidx_shifts() {
 
         // First to demonstrate that we have indeed shifted because trying to open
         // the file with default settings will give us super invalid headers.
-        let read = giga_segy_in::SegyFile::open(path_str, SegySettings::default())
-            .expect("Could not reopen");
+        let file = std::fs::File::open(path_str).unwrap();
+        let read =
+            giga_segy_in::SegyFile::open(file, SegySettings::default()).expect("Could not reopen");
 
         assert_eq!(&original_bin_header, read.get_bin_header());
         // There are some traces where inline_no and xline_no are zero anyway.
@@ -378,7 +379,8 @@ fn header_test_bidx_shifts() {
         assert!(read.traces_iter().all(|t| t.get_header().crossline_no == 0));
 
         // But if we open the file with the right settings, magic happens.
-        let read = giga_segy_in::SegyFile::open(path_str, settings).expect("Could not reopen");
+        let file = std::fs::File::open(path_str).unwrap();
+        let read = giga_segy_in::SegyFile::open(file, settings).expect("Could not reopen");
 
         assert_eq!(&original_bin_header, read.get_bin_header());
         for (w, r) in old_trace_headers.iter().zip(read.traces_iter()) {
@@ -415,7 +417,8 @@ fn header_tests_inner(settings: SegySettings, sample_format: SampleFormatCode) {
             .cloned()
             .collect::<Vec<_>>();
 
-        let segy_file = giga_segy_in::SegyFile::open(path_str, settings).expect("Could not reopen");
+        let file = std::fs::File::open(path_str).unwrap();
+        let segy_file = giga_segy_in::SegyFile::open(file, settings).expect("Could not reopen");
         check_headers(segy_file, original_bin_header, original_trace_headers);
     }
 }

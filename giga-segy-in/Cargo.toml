@@ -1,6 +1,5 @@
 [package]
 name = "giga-segy-in"
-authors = ["Aleksey Zholobenko <aleksey.zholobenko@giga-infosystems.com>"]
 categories = ["science::geo", "parser-implementations"]
 description = "A library allows parsing of SEG-Y."
 documentation = "https://docs.rs/giga_segy_in"
@@ -8,7 +7,8 @@ edition = "2018"
 keywords = ["geo", "SEG-Y", "SEGY", "seismic", "parser"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/GiGainfosystems/giga-segy"
-version = "0.4.0"
+version = "0.5.0"
+include = ["src/**/*.rs", "README.md", "LICENSE_*.txt", "Cargo.toml"]
 
 [lib]
 name = "giga_segy_in"
@@ -16,7 +16,7 @@ crate-type = ["staticlib","rlib"]
 
 [dependencies.giga-segy-core]
 path = "../giga-segy-core"
-version = "0.4"
+version = "0.5"
 
 [dependencies]
 encoding8 = "0.3"

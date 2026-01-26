@@ -1,23 +1,27 @@
 use crate::memory_map::*;
-
 use giga_segy_core::SegySettings;
+use std::convert::TryFrom;
 
 #[cfg(test)]
 // NB: Some tests will only work with a valid SEGY file in the right place.
 const TEST_FILE: &str = "../testdata/DutchMiniHead.sgy";
 
+fn test_file() -> std::fs::File {
+    std::fs::File::open(TEST_FILE).unwrap()
+}
+
 #[test]
 fn test_map_file_to_memory() {
-    let map = MappedSegY::new(TEST_FILE);
+    let map = MappedSegY::try_from(test_file());
     assert!(map.is_ok());
     let map = map.unwrap();
-    println!("map len={}", map.map.len());
+    println!("map len={}", map.len());
 }
 
 #[test]
 fn test_get_tape_label_of_mapped_segy_y() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let label = map.get_tape_label(&s).expect("Should be Ok but isn't.");
     assert!(label.is_none());
 }
@@ -25,7 +29,7 @@ fn test_get_tape_label_of_mapped_segy_y() {
 #[test]
 fn test_get_bin_header() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let bin_header = map.get_bin_header(&s);
     println!("{:?}", bin_header);
     assert!(bin_header.is_ok());
@@ -33,7 +37,7 @@ fn test_get_bin_header() {
 
 #[test]
 fn test_get_text_header() {
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let text_header = map.get_text_header();
     println!("{:?}", text_header);
     assert!(text_header.is_ok());
@@ -42,7 +46,7 @@ fn test_get_text_header() {
 
 #[test]
 fn test_get_extended_text_headers() {
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let text_headers = map.get_extended_text_headers(0);
     println!("{:?}", text_headers);
     assert!(text_headers.is_ok());
@@ -52,7 +56,7 @@ fn test_get_extended_text_headers() {
 #[test]
 fn test_get_trace_headers() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let mut bin_header = map.get_bin_header(&s).expect("Bin header is dead.");
     let extended_headers = map
         .get_extended_text_headers(0)
@@ -73,7 +77,7 @@ fn test_get_trace_headers() {
 #[test]
 fn test_get_trace_data_as_bytes_unprocessed() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let mut bin_header = map.get_bin_header(&s).expect("Bin header is dead.");
     let extended_headers = map
         .get_extended_text_headers(0)
@@ -91,14 +95,14 @@ fn test_get_trace_data_as_bytes_unprocessed() {
     .expect("Could not get data.");
 
     assert_eq!(data.len(), trace_headers[0].len());
-    assert_eq!(data[0], map.map[trace_headers[0].get_start()]);
+    assert_eq!(data[0], map[trace_headers[0].get_start()]);
     println!("{:?}", data);
 }
 
 #[test]
 fn test_get_trace_data_as_bytes_unprocessed2() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let mut bin_header = map.get_bin_header(&s).expect("Bin header is dead.");
     let extended_headers = map
         .get_extended_text_headers(0)
@@ -116,14 +120,14 @@ fn test_get_trace_data_as_bytes_unprocessed2() {
     .expect("Could not get data.");
 
     assert_eq!(data.len(), trace_headers[2499].len());
-    assert_eq!(data[0], map.map[trace_headers[2499].get_start()]);
+    assert_eq!(data[0], map[trace_headers[2499].get_start()]);
     println!("{:?}", data);
 }
 
 #[test]
 fn test_get_trace_data_point_as_bytes_unprocessed() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let mut bin_header = map.get_bin_header(&s).expect("Bin header is dead.");
     let extended_headers = map
         .get_extended_text_headers(0)
@@ -157,7 +161,7 @@ fn test_get_trace_data_point_as_bytes_unprocessed() {
 #[test]
 fn test_get_trace_data_as_f32() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let mut bin_header = map.get_bin_header(&s).expect("Bin header is dead.");
     let extended_headers = map
         .get_extended_text_headers(0)
@@ -190,7 +194,7 @@ fn test_get_trace_data_as_f32() {
 #[test]
 fn test_get_trace_data_point_as_f32() {
     let s = SegySettings::default();
-    let map = MappedSegY::new(TEST_FILE).expect("Couldn't map SEG-Y");
+    let map = MappedSegY::try_from(test_file()).expect("Couldn't map SEG-Y");
     let mut bin_header = map.get_bin_header(&s).expect("Bin header is dead.");
     let extended_headers = map
         .get_extended_text_headers(0)
@@ -213,14 +217,14 @@ fn test_get_trace_data_point_as_f32() {
 #[test]
 fn test_open_file() {
     let s = SegySettings::default();
-    let segy = crate::SegyFile::open(TEST_FILE, s);
+    let segy = crate::SegyFile::open(test_file(), s);
     assert!(segy.is_ok());
 }
 
 #[test]
 fn test_open_file_get_get_trace_data_as_f32() {
     let s = SegySettings::default();
-    let segy = crate::SegyFile::open(TEST_FILE, s).unwrap();
+    let segy = crate::SegyFile::open(test_file(), s).unwrap();
 
     for h in segy.traces_iter().take(1000) {
         let data = segy
@@ -237,7 +241,7 @@ fn test_open_file_get_get_trace_data_as_f32() {
 #[test]
 fn test_open_file_get_get_trace_data_as_bytes_unprocessed() {
     let s = SegySettings::default();
-    let segy = crate::SegyFile::open(TEST_FILE, s).unwrap();
+    let segy = crate::SegyFile::open(test_file(), s).unwrap();
 
     for h in segy.traces_iter().take(1000) {
         let data = segy
@@ -251,7 +255,7 @@ fn test_open_file_get_get_trace_data_as_bytes_unprocessed() {
 #[test]
 fn test_get_trace_name() {
     let s = SegySettings::default();
-    let segy = crate::SegyFile::open(TEST_FILE, s).unwrap();
+    let segy = crate::SegyFile::open(test_file(), s).unwrap();
 
     let mut th = segy.traces_iter().nth(0).unwrap().get_header().to_owned();
     th.trace_name = [b'S', b'E', b'G', b'0', b'1', b'2', b'3', b'4'];

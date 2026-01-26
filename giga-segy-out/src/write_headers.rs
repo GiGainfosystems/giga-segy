@@ -4,9 +4,6 @@ use giga_segy_core::enums::*;
 use giga_segy_core::errors::*;
 use giga_segy_core::{BinHeader, TapeLabel, TraceHeader};
 use num::ToPrimitive;
-// use rust_segy_input::{BIN_HEADER_LEN, TRACE_HEADER_LEN};
-
-use std::fs::File;
 use std::io::Write;
 
 use crate::settings::SegyWriteSettings;
@@ -48,7 +45,7 @@ impl SegyHeaderToBytes for TapeLabel {
 /// The standard text header is a string of length 3200 bytes.
 ///
 /// NB: It is more efficient to just write it than to allocate it as a string.
-pub(crate) fn write_text_header(header: &str, file: &mut File) -> Result<(), RsgError> {
+pub(crate) fn write_text_header(header: &str, file: &mut impl Write) -> Result<(), RsgError> {
     let raw_bytes = header.as_bytes();
     let bl = 3200 - raw_bytes.len() as i64;
 

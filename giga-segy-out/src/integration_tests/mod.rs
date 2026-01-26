@@ -13,6 +13,7 @@ use giga_segy_core::errors::*;
 use giga_segy_core::{BinHeader, SegySettings, TraceHeader};
 use num::ToPrimitive;
 use std::fmt::Debug;
+use std::fs::File;
 use std::path::Path;
 
 mod survey_roundtrip;
@@ -56,7 +57,7 @@ impl Survey {
         written_sample_format: SampleFormatCode,
         settings: SegySettings,
         scale_multiplier: f32,
-    ) -> Result<SegyFile<SegySettings>, RsgError> {
+    ) -> Result<SegyFile<SegySettings, File>, RsgError> {
         let final_name = path.join(&self.name).with_extension("sgy");
 
         let longest_trace = self
@@ -124,7 +125,8 @@ impl Survey {
     }
 
     fn read(path: &str, name: &str, settings: SegySettings) -> Result<Self, RsgError> {
-        let segy_file = giga_segy_in::SegyFile::open(path, settings)?;
+        let file = std::fs::File::open(path).unwrap();
+        let segy_file = giga_segy_in::SegyFile::open(file, settings)?;
 
         let bin_header = segy_file.get_bin_header();
         let mut data = Vec::with_capacity(segy_file.trace_count());
